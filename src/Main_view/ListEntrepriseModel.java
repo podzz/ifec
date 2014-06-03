@@ -32,11 +32,13 @@ public class ListEntrepriseModel extends AbstractListModel<Object> implements Ab
 
     @Override
     public Object getElementAt(int index) {
-        return le_.get(index).getNameEntreprise() + "-" + le_.get(index).getDescriptionEntreprise();
+    Entreprise e = le_.get(index);
+    return "- " + e.getNameEntreprise();
     }
 
     @Override
     public void property_change() {
+        System.out.println("List modified");
         le_ = er_.list_entreprise();
     }
     

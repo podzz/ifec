@@ -26,8 +26,8 @@ public class Main_window extends javax.swing.JFrame {
      */
     public Main_window() {
         em_ = new EntrepriseModel();
-        EntrepriseRequest.getInstance().add_fire_component(em_);
         initComponents();
+        EntrepriseRequest.getInstance().add_fire_component(em_, jTable1);
         addListeners();
 
     }
@@ -551,9 +551,6 @@ public class Main_window extends javax.swing.JFrame {
         e.setNameEntreprise(jTextField2.getText());
         e.setDescriptionEntreprise(jTextArea2.getText());
         EntrepriseRequest.getInstance().update_entreprise(Long.parseLong(em_.getValueAt(jTable1.getSelectedRow(), 0).toString()), e);
-
-        jTable1.revalidate();
-        jTable1.repaint();
         jTable1.setRowSelectionInterval(0, 0);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -566,8 +563,6 @@ public class Main_window extends javax.swing.JFrame {
         e.setNameEntreprise(jTextField1.getText());
         e.setDescriptionEntreprise(jTextArea1.getText());
         if (EntrepriseRequest.getInstance().add_entreprise(e)) {
-            jTable1.revalidate();
-            jTable1.repaint();
             jTextField1.setText("");
             jTextArea1.setText("");
             jButton1.setEnabled(false);
@@ -579,8 +574,6 @@ public class Main_window extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Long id = Long.parseLong(em_.getValueAt(jTable1.getSelectedRow(), 0).toString());
         EntrepriseRequest.getInstance().delete_entreprise(id);
-        jTable1.revalidate();
-        jTable1.repaint();
         if (jTable1.getRowCount() > 0)
             jTable1.setRowSelectionInterval(0, 0);
         else

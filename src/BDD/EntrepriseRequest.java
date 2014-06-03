@@ -1,6 +1,7 @@
 package BDD;
 
 import Main_view.AbstractModel;
+import Tools.Tuple;
 import comptedit_db.Entreprise;
 import comptedit_db.HibernateUtil;
 import java.net.URL;
@@ -19,10 +20,10 @@ public class EntrepriseRequest {
 
     private static EntrepriseRequest instance_ = new EntrepriseRequest();
 
-    private List<AbstractModel> l;
+    private List<Tuple<AbstractModel,JComponent>> l;
     private EntrepriseRequest()
     {   
-        l = new ArrayList<AbstractModel>();
+        l = new ArrayList<Tuple<AbstractModel, JComponent>>();
     }
     
     public static EntrepriseRequest getInstance()
@@ -109,12 +110,16 @@ public class EntrepriseRequest {
     
     public void fire_component()
     {
-        for (AbstractModel jc: l)
-            jc.property_change();
+        for (Tuple<AbstractModel, JComponent> jc: l)
+        {
+            jc.getX().property_change();
+            jc.getY().revalidate();
+            jc.getY().repaint();
+        }
     }
     
-    public void add_fire_component(AbstractModel jc)
+    public void add_fire_component(AbstractModel jc, JComponent c)
     {
-        l.add(jc);
+        l.add(new Tuple<AbstractModel, JComponent>(jc,c));
     }
 }

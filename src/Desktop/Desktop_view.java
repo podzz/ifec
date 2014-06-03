@@ -7,6 +7,7 @@
 package Desktop;
 
 import BDD.EntrepriseRequest;
+import Main_view.EntrepriseModel;
 import Main_view.ListEntrepriseModel;
 import Main_view.Main_window;
 import javax.swing.JLabel;
@@ -24,7 +25,9 @@ public class Desktop_view extends javax.swing.JFrame {
      * Creates new form Desktop_view
      */
     public Desktop_view() {
+        lem_ = new ListEntrepriseModel();
         initComponents();
+        EntrepriseRequest.getInstance().add_fire_component(lem_,jXList2);
         addListeners();
     }
 
@@ -293,5 +296,5 @@ public class Desktop_view extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel2;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel3;
     // End of variables declaration//GEN-END:variables
-    private ListEntrepriseModel lem_ = new ListEntrepriseModel();
+    private ListEntrepriseModel lem_;
 }
