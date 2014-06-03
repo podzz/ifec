@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 3 juin 2014 00:48:18 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="comptedit_db.Exercice" table="exercice" catalog="comptedit">
+        <id name="idExercice" type="java.lang.Long">
+            <column name="ID_EXERCICE" />
+            <generator class="identity" />
+        </id>
+        <property name="entreprise" type="java.lang.Integer">
+            <column name="ENTREPRISE" />
+        </property>
+        <property name="fecId" type="java.lang.Integer">
+            <column name="FEC_ID" />
+        </property>
+    </class>
+</hibernate-mapping>
