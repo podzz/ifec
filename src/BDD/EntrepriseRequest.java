@@ -1,11 +1,14 @@
 package BDD;
 
+import Main_view.AbstractModel;
 import comptedit_db.Entreprise;
 import comptedit_db.HibernateUtil;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,6 +19,17 @@ public class EntrepriseRequest {
 
     private static EntrepriseRequest instance_ = new EntrepriseRequest();
 
+    private List<AbstractModel> l;
+    private EntrepriseRequest()
+    {   
+        l = new ArrayList<AbstractModel>();
+    }
+    
+    public static EntrepriseRequest getInstance()
+    {
+        return instance_;
+    }
+    
     public boolean check_entreprise(String name) {
         boolean check = false;
         try {
@@ -41,7 +55,9 @@ public class EntrepriseRequest {
                 Session session = HibernateUtil.getSessionFactory().getCurrentSession();
                 session.beginTransaction();
                 session.save(ent);
+                
                 session.getTransaction().commit();
+                fire_component();
             } catch (HibernateException e) {
                 e.printStackTrace();
             }
@@ -68,7 +84,9 @@ public class EntrepriseRequest {
             session.beginTransaction();
             Entreprise e = (Entreprise) session.get(Entreprise.class, id);
             session.delete(e);
+            
             session.getTransaction().commit();
+            fire_component();
         } catch (HibernateException e) {
             e.printStackTrace();
         }
@@ -83,8 +101,20 @@ public class EntrepriseRequest {
             e.setNameEntreprise(update_entreprise.getNameEntreprise());
             session.update(e);
             session.getTransaction().commit();
+            fire_component();
         } catch (HibernateException e) {
             e.printStackTrace();
         }
+    }
+    
+    public void fire_component()
+    {
+        for (AbstractModel jc: l)
+            jc.property_change();
+    }
+    
+    public void add_fire_component(AbstractModel jc)
+    {
+        l.add(jc);
     }
 }

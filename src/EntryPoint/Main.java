@@ -1,5 +1,6 @@
 package EntryPoint;
 
+import Desktop.Desktop_view;
 import Main_view.Main_window;
 import Main_view.Main_window;
 import java.awt.EventQueue;
@@ -22,8 +23,10 @@ public class Main {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Main_window frame = new Main_window();
-                    frame.setVisible(true);
+                    //Main_window frame = new Main_window();
+                    //frame.setVisible(true);
+                    Desktop_view v = new Desktop_view();
+                    v.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -4,6 +4,7 @@ public class FecModel
 {
 	public enum FecField
 	{
+           
 		Journal_code, Journal_lib, Ecriture_num, Ecriture_date, Compte_num, Compte_lib, Compte_aux_num, Compte_aux_lib, Piece_ref, Piece_date, Ecriture_lib, Montant, Sens, Ecriture_let, Date_let, Valid_date, Montant_devise, IDevise
 	}
 

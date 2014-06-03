@@ -12,34 +12,32 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author Flash
  */
-public class EntrepriseModel extends AbstractTableModel{
-   
-        private final String[] entetes = { "id_entreprise", "Nom", "Description"};	
-	private EntrepriseRequest er_ = new EntrepriseRequest();
-        private List<Entreprise> le_ = null;
-        
-        
-        public EntrepriseModel()
-        {
-            le_ = er_.list_entreprise();
-        }
-	@Override
-	public int getColumnCount() {
-		return entetes.length;
-	}
+public class EntrepriseModel extends AbstractTableModel implements AbstractModel {
 
-	@Override
-	public String getColumnName(int columnIndex) {
-		return entetes[columnIndex];
-	}
+    private final String[] entetes = {"id_entreprise", "Nom", "Description"};
+    private final EntrepriseRequest er_ = EntrepriseRequest.getInstance();
+    private List<Entreprise> le_ = null;
+
+    public EntrepriseModel() {
+        le_ = er_.list_entreprise();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return entetes.length;
+    }
+
+    @Override
+    public String getColumnName(int columnIndex) {
+        return entetes[columnIndex];
+    }
 
     @Override
     public int getRowCount() {
@@ -48,8 +46,7 @@ public class EntrepriseModel extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        switch(columnIndex)
-        {
+        switch (columnIndex) {
             case 0:
                 return le_.get(rowIndex).getIdEntreprise();
             case 1:
@@ -60,12 +57,17 @@ public class EntrepriseModel extends AbstractTableModel{
                 return null;
         }
     }
-    
-    public void setList()
-    {
+
+    public void setList() {
         le_ = er_.list_entreprise();
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         System.out.println(dateFormat.format(date));
+    }
+
+    @Override
+    public void property_change() {
+        System.out.println("fire !");
+        setList();
     }
 }
