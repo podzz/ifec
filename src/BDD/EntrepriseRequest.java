@@ -59,7 +59,6 @@ public class EntrepriseRequest {
         } catch (HibernateException e) {
             e.printStackTrace();
         }
-        test
         return l;
     }
 
