@@ -284,6 +284,7 @@ public class Desktop_view extends javax.swing.JFrame {
     
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         EditList_view mw = new EditList_view();
+        mw.setLocation(100,100);
         mw.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 

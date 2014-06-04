@@ -11,6 +11,8 @@
     <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping resource="comptedit_db/Exercice.hbm.xml"/>
+    <mapping resource="comptedit_db/Fec.hbm.xml"/>
+    <mapping resource="comptedit_db/StructureAnalytique.hbm.xml"/>
     <mapping resource="comptedit_db/Entreprise.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

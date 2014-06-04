@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 4 juin 2014 20:15:37 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="comptedit_db.Fec" table="fec" catalog="comptedit">
+        <id name="idFec" type="java.lang.Long">
+            <column name="ID_FEC" />
+            <generator class="identity" />
+        </id>
+        <property name="fec" type="java.lang.Integer">
+            <column name="FEC" />
+        </property>
+        <property name="journalCode" type="string">
+            <column name="JOURNAL_CODE" length="3" />
+        </property>
+        <property name="journalLib" type="string">
+            <column name="JOURNAL_LIB" length="65535" />
+        </property>
+        <property name="ecritureNum" type="java.lang.Integer">
+            <column name="ECRITURE_NUM" />
+        </property>
+        <property name="ecritureDate" type="date">
+            <column name="ECRITURE_DATE" length="10" />
+        </property>
+        <property name="compteNum" type="string">
+            <column name="COMPTE_NUM" length="6" />
+        </property>
+        <property name="compteLib" type="string">
+            <column name="COMPTE_LIB" length="65535" />
+        </property>
+        <property name="compteAuxNum" type="string">
+            <column name="COMPTE_AUX_NUM" length="65535" />
+        </property>
+        <property name="compteAuxLib" type="string">
+            <column name="COMPTE_AUX_LIB" length="65535" />
+        </property>
+        <property name="pieceRef" type="string">
+            <column name="PIECE_REF" length="3" />
+        </property>
+        <property name="pieceDate" type="date">
+            <column name="PIECE_DATE" length="10" />
+        </property>
+        <property name="ecritureLib" type="string">
+            <column name="ECRITURE_LIB" length="65535" />
+        </property>
+        <property name="montant" type="java.lang.Float">
+            <column name="MONTANT" precision="12" scale="0" />
+        </property>
+        <property name="sens" type="java.lang.Character">
+            <column name="SENS" length="1" />
+        </property>
+        <property name="ecritureLet" type="string">
+            <column name="ECRITURE_LET" length="65535" />
+        </property>
+        <property name="dateLet" type="date">
+            <column name="DATE_LET" length="10" />
+        </property>
+        <property name="validDate" type="date">
+            <column name="VALID_DATE" length="10" />
+        </property>
+        <property name="montantDevise" type="java.lang.Float">
+            <column name="MONTANT_DEVISE" precision="12" scale="0" />
+        </property>
+        <property name="IDevise" type="string">
+            <column name="I_DEVISE" length="65535" />
+        </property>
+    </class>
+</hibernate-mapping>

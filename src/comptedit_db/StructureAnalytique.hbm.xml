@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 4 juin 2014 20:15:37 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="comptedit_db.StructureAnalytique" table="structure_analytique" catalog="comptedit">
+        <id name="idStructure" type="java.lang.Long">
+            <column name="ID_STRUCTURE" />
+            <generator class="identity" />
+        </id>
+        <property name="aliasStructure" type="string">
+            <column name="ALIAS_STRUCTURE" length="80" />
+        </property>
+        <property name="section" type="string">
+            <column name="SECTION" length="4" />
+        </property>
+        <property name="compteAnalytique" type="string">
+            <column name="COMPTE_ANALYTIQUE" length="65535" />
+        </property>
+        <property name="libelle" type="string">
+            <column name="LIBELLE" length="65535" />
+        </property>
+    </class>
+</hibernate-mapping>

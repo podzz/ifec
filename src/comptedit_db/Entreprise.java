@@ -1,5 +1,5 @@
 package comptedit_db;
-// Generated 3 juin 2014 00:48:18 by Hibernate Tools 3.6.0
+// Generated 4 juin 2014 20:15:37 by Hibernate Tools 3.6.0
 
 
 
@@ -12,13 +12,15 @@ public class Entreprise  implements java.io.Serializable {
      private Long idEntreprise;
      private String nameEntreprise;
      private String descriptionEntreprise;
+     private Integer structureAnalytique;
 
     public Entreprise() {
     }
 
-    public Entreprise(String nameEntreprise, String descriptionEntreprise) {
+    public Entreprise(String nameEntreprise, String descriptionEntreprise, Integer structureAnalytique) {
        this.nameEntreprise = nameEntreprise;
        this.descriptionEntreprise = descriptionEntreprise;
+       this.structureAnalytique = structureAnalytique;
     }
    
     public Long getIdEntreprise() {
@@ -41,6 +43,13 @@ public class Entreprise  implements java.io.Serializable {
     
     public void setDescriptionEntreprise(String descriptionEntreprise) {
         this.descriptionEntreprise = descriptionEntreprise;
+    }
+    public Integer getStructureAnalytique() {
+        return this.structureAnalytique;
+    }
+    
+    public void setStructureAnalytique(Integer structureAnalytique) {
+        this.structureAnalytique = structureAnalytique;
     }
 
 
