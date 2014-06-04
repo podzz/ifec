@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package Main_view;
+package Models;
 
-import BDD.EntrepriseRequest;
+import comptedit_db.EntrepriseRequest;
 import comptedit_db.Entreprise;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,7 +64,7 @@ public class EntrepriseModel extends AbstractTableModel implements AbstractModel
         Date date = new Date();
         System.out.println(dateFormat.format(date));
     }
-
+    
     @Override
     public void property_change() {
         System.out.println("fire !");

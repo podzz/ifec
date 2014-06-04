@@ -1,6 +1,6 @@
-package BDD;
+package comptedit_db;
 
-import Main_view.AbstractModel;
+import Models.AbstractModel;
 import Tools.Tuple;
 import comptedit_db.Entreprise;
 import comptedit_db.HibernateUtil;
@@ -20,23 +20,22 @@ public class EntrepriseRequest {
 
     private static EntrepriseRequest instance_ = new EntrepriseRequest();
 
-    private List<Tuple<AbstractModel,JComponent>> l;
-    private EntrepriseRequest()
-    {   
+    private List<Tuple<AbstractModel, JComponent>> l;
+
+    private EntrepriseRequest() {
         l = new ArrayList<Tuple<AbstractModel, JComponent>>();
     }
-    
-    public static EntrepriseRequest getInstance()
-    {
+
+    public static EntrepriseRequest getInstance() {
         return instance_;
     }
-    
+
     public boolean check_entreprise(String name) {
         boolean check = false;
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
-            List<Entreprise> l = session.createQuery("from Entreprise").list();
+            List<Entreprise> l = session.createQuery("from Entreprise ORDER BY NAME_ENTREPRISE").list();
             for (Entreprise e : l) {
                 if (e.getNameEntreprise().equals(name)) {
                     check = true;
@@ -56,7 +55,7 @@ public class EntrepriseRequest {
                 Session session = HibernateUtil.getSessionFactory().getCurrentSession();
                 session.beginTransaction();
                 session.save(ent);
-                
+
                 session.getTransaction().commit();
                 fire_component();
             } catch (HibernateException e) {
@@ -71,12 +70,31 @@ public class EntrepriseRequest {
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
-            l = session.createQuery("from Entreprise").list();
+            l = session.createQuery("from Entreprise ORDER BY NAME_ENTREPRISE").list();
             session.getTransaction().commit();
         } catch (HibernateException e) {
             e.printStackTrace();
         }
         return l;
+    }
+
+    public List<Entreprise> list_entreprise_begin_with(String text) {
+        List<Entreprise> l = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            l = session.createQuery("from Entreprise").list();
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        List<Entreprise> clean_list = new ArrayList<Entreprise>();
+        for (Entreprise e : l) {
+            if (e.getNameEntreprise().startsWith(text)) {
+                clean_list.add(e);
+            }
+        }
+        return clean_list;
     }
 
     public void delete_entreprise(long id) {
@@ -85,7 +103,7 @@ public class EntrepriseRequest {
             session.beginTransaction();
             Entreprise e = (Entreprise) session.get(Entreprise.class, id);
             session.delete(e);
-            
+
             session.getTransaction().commit();
             fire_component();
         } catch (HibernateException e) {
@@ -107,19 +125,17 @@ public class EntrepriseRequest {
             e.printStackTrace();
         }
     }
-    
-    public void fire_component()
-    {
-        for (Tuple<AbstractModel, JComponent> jc: l)
-        {
+
+    public void fire_component() {
+        for (Tuple<AbstractModel, JComponent> jc : l) {
             jc.getX().property_change();
             jc.getY().revalidate();
             jc.getY().repaint();
         }
     }
-    
-    public void add_fire_component(AbstractModel jc, JComponent c)
-    {
-        l.add(new Tuple<AbstractModel, JComponent>(jc,c));
+
+    public void add_fire_component(AbstractModel jc, JComponent c) {
+        l.add(new Tuple<AbstractModel, JComponent>(jc, c));
     }
+
 }

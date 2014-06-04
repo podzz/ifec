@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Main_view;
+package Views;
 
-import BDD.EntrepriseRequest;
+import Models.EntrepriseModel;
+import Models.NameEntrepriseModel;
 import Tools.Resizer;
 import comptedit_db.Entreprise;
+import comptedit_db.EntrepriseRequest;
 import java.awt.Point;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,12 +21,12 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Flash
  */
-public class Main_window extends javax.swing.JFrame {
+public class EditList_view extends javax.swing.JFrame {
 
     /**
      * Creates new form Main_window2
      */
-    public Main_window() {
+    public EditList_view() {
         em_ = new EntrepriseModel();
         initComponents();
         EntrepriseRequest.getInstance().add_fire_component(em_, jTable1);
@@ -95,6 +97,11 @@ public class Main_window extends javax.swing.JFrame {
         jSeparator6 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Edition de liste");
+        setMinimumSize(new java.awt.Dimension(711, 308));
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
+        setResizable(false);
+        setType(java.awt.Window.Type.UTILITY);
 
         jPanel1.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -102,8 +109,8 @@ public class Main_window extends javax.swing.JFrame {
             }
         });
 
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         jTabbedPane1.setOpaque(true);
+        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -121,7 +128,9 @@ public class Main_window extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jLabel2.setText("Nom de l'entreprise :");
@@ -597,7 +606,7 @@ public class Main_window extends javax.swing.JFrame {
                 if (selectedRow >= 0) {
                     jTextField2.setEnabled(true);
                     jTextArea2.setEnabled(true);
-                    jTextField2.setText((String) jTable1.getValueAt(selectedRow, 1));
+                    jTextField2.setText((String)jTable1.getValueAt(selectedRow, 1));
                     jTextArea2.setText((String) jTable1.getValueAt(selectedRow, 2));
                     jButton2.setEnabled(true);
                     jButton3.setEnabled(true);
@@ -663,20 +672,20 @@ public class Main_window extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main_window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditList_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main_window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditList_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main_window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditList_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main_window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditList_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Main_window().setVisible(true);
+                new EditList_view().setVisible(true);
             }
         });
     }

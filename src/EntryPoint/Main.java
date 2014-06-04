@@ -1,8 +1,8 @@
 package EntryPoint;
 
-import Desktop.Desktop_view;
-import Main_view.Main_window;
-import Main_view.Main_window;
+import Views.Desktop_view;
+import Views.EditList_view;
+import Views.EditList_view;
 import java.awt.EventQueue;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Metal".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
