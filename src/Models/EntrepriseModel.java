@@ -21,7 +21,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class EntrepriseModel extends AbstractTableModel implements AbstractModel {
 
-    private final String[] entetes = {"id_entreprise", "Nom", "Description"};
+    private final String[] entetes = {"Nom", "Description"};
     private final EntrepriseRequest er_ = EntrepriseRequest.getInstance();
     private List<Entreprise> le_ = null;
 
@@ -48,10 +48,8 @@ public class EntrepriseModel extends AbstractTableModel implements AbstractModel
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return le_.get(rowIndex).getIdEntreprise();
-            case 1:
                 return le_.get(rowIndex).getNameEntreprise();
-            case 2:
+            case 1:
                 return le_.get(rowIndex).getDescriptionEntreprise();
             default:
                 return null;

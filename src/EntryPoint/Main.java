@@ -3,6 +3,7 @@ package EntryPoint;
 import Views.Desktop_view;
 import Views.EditList_view;
 import Views.EditList_view;
+import java.awt.Color;
 import java.awt.EventQueue;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
