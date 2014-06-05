@@ -1,5 +1,5 @@
 package comptedit_db;
-// Generated 4 juin 2014 20:15:37 by Hibernate Tools 3.6.0
+// Generated 5 juin 2014 15:14:36 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;

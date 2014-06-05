@@ -3,39 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Models;
+package Models.ComboBox;
 
+import Models.AbstractModel;
 import comptedit_db.Entreprise;
 import comptedit_db.EntrepriseRequest;
-import comptedit_db.StructAnalRequest;
-import comptedit_db.StructureAnalytique;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.MutableComboBoxModel;
 import javax.swing.event.ListDataListener;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author Flash
  */
-public class AliasStructureAnalytique extends DefaultComboBoxModel implements  AbstractModel {
+public class ComboBoxEntreprise implements  AbstractModel, ComboBoxModel {
 
-    private final StructAnalRequest sa_ = StructAnalRequest.getInstance();
-    private List<StructureAnalytique> lsa_ = null;
+    private final EntrepriseRequest er_;
+    private List<Entreprise> lsa_ = null;
     private JComboBox jcb_;
     private Object selected_ = null;
 
-    public AliasStructureAnalytique(JComboBox jcb) {
+    public ComboBoxEntreprise(JComboBox jcb) {
+        er_ = EntrepriseRequest.getInstance();
         jcb_ = jcb;
-        lsa_ = sa_.list_structanal();
+        lsa_ = er_.list_entreprise();
         if (jcb.getSelectedItem() != null)
             setSelectedItem(jcb.getSelectedItem());
         
@@ -58,7 +50,7 @@ public class AliasStructureAnalytique extends DefaultComboBoxModel implements  A
 
     @Override
     public Object getElementAt(int index) {
-        return lsa_.get(index).getAliasStructure();
+        return lsa_.get(index).getNameEntreprise();
     }
 
     @Override
@@ -71,9 +63,14 @@ public class AliasStructureAnalytique extends DefaultComboBoxModel implements  A
     }
 
     public void setList() {
-       jcb_.setModel(new AliasStructureAnalytique(jcb_));
+       jcb_.setModel(new ComboBoxEntreprise(jcb_));
     }
 
+    public long get_id_selected()
+    {
+        return lsa_.get(jcb_.getSelectedIndex()).getIdEntreprise();
+    }
+    
     @Override
     public void property_change() {
         System.out.println("fire jcombobox!");

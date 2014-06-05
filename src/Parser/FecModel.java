@@ -15,7 +15,7 @@ public class FecModel
 		array_field = line.split("\\t");
 	}
 
-	public String getField(FecField ff)
+	public Object getField(FecField ff)
 	{
 		switch (ff)
 		{
@@ -59,7 +59,53 @@ public class FecModel
 			return null;
 		}
 	}
+        
+        public Object getField(int ff)
+        {
+            switch (ff)
+		{
+		case 0:
+			return array_field[0];
+		case 1:
+			return array_field[1];
+		case 2:
+			return array_field[2];
+		case 3:
+			return array_field[3];
+		case 4:
+			return array_field[4];
+		case 5:
+			return array_field[5];
+		case 6:
+			return array_field[6];
+		case 7:
+			return array_field[7];
+		case 8:
+			return array_field[8];
+		case 9:
+			return array_field[9];
+		case 10:
+			return array_field[10];
+		case 11:
+			return array_field[11];
+		case 12:
+			return array_field[12];
+		case 13:
+			return array_field[13];
+		case 14:
+			return array_field[14];
+		case 15:
+			return array_field[15];
+		case 16:
+			return array_field[16];
+		case 17:
+			return array_field[17];
+		default:
+			return null;
+		}
+        }
 
+        
 	public Object[] getArray()
 	{
 		return array_field;

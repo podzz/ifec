@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 4 juin 2014 20:15:37 by Hibernate Tools 3.6.0 -->
+<!-- Generated 5 juin 2014 15:14:36 by Hibernate Tools 3.6.0 -->
 <hibernate-mapping>
     <class name="comptedit_db.Fec" table="fec" catalog="comptedit">
         <id name="idFec" type="java.lang.Long">

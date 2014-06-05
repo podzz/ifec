@@ -5,9 +5,9 @@
  */
 package Views;
 
-import Models.AliasStructureAnalytique;
-import Models.EntrepriseModel;
-import Models.NameEntrepriseModel;
+import Models.ComboBox.ComboBoxStructure;
+import Models.Table.TableEntreprise2;
+import Models.Table.TableEntreprise;
 import Tools.Resizer;
 import comptedit_db.Entreprise;
 import comptedit_db.EntrepriseRequest;
@@ -22,20 +22,19 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Flash
  */
-public class EditList_view extends javax.swing.JFrame {
-
+public class EditEntreprise extends javax.swing.JFrame {
 
     /**
      * Creates new form Main_window2
      */
-    public EditList_view() {
-        em_ = new EntrepriseModel();
-        
+    public EditEntreprise() {
+        em_ = new TableEntreprise2();
+
         initComponents();
-        
+
         EntrepriseRequest.getInstance().add_fire_component(em_, jTable1);
-        
-        asa_ = new AliasStructureAnalytique(jComboBox1);
+
+        asa_ = new ComboBoxStructure(jComboBox1);
         EntrepriseRequest.getInstance().add_fire_component(asa_, jComboBox1);
         jComboBox1.setModel(asa_);
         addListeners();
@@ -115,6 +114,12 @@ public class EditList_view extends javax.swing.JFrame {
         jPanel1.add(jButton1);
 
         jLabel7.setText("Structure analytique :");
+
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -209,10 +214,9 @@ public class EditList_view extends javax.swing.JFrame {
                         .addGap(18, 18, 18)))
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
-                        .addComponent(jTextField2)
-                        .addComponent(jScrollPane3)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
+                    .addComponent(jTextField2)
+                    .addComponent(jScrollPane3))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -279,13 +283,14 @@ public class EditList_view extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        jButton1.setEnabled(!jTextField1.getText().equals(""));
+        jButton1.setEnabled(!jTextField1.getText().equals("") && jComboBox1.getSelectedItem() != null);
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Entreprise e = new Entreprise();
         e.setNameEntreprise(jTextField1.getText());
         e.setDescriptionEntreprise(jTextArea1.getText());
+        e.setStructureAnalytique((String) jComboBox1.getSelectedItem());
         if (EntrepriseRequest.getInstance().add_entreprise(e)) {
             jTextField1.setText("");
             jTextArea1.setText("");
@@ -296,26 +301,32 @@ public class EditList_view extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int index_selected = jTable1.getSelectedRow();
         Entreprise e = new Entreprise();
         e.setNameEntreprise(jTextField2.getText());
         e.setDescriptionEntreprise(jTextArea2.getText());
-        EntrepriseRequest.getInstance().update_entreprise(Long.parseLong(em_.getValueAt(jTable1.getSelectedRow(), 0).toString()), e);
-        jTable1.setRowSelectionInterval(0, 0);
+        EntrepriseRequest.getInstance().update_entreprise(em_.getIdAt(jTable1.getSelectedRow()), e);
+        jTable1.setRowSelectionInterval(index_selected, index_selected);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        Long id = Long.parseLong(em_.getValueAt(jTable1.getSelectedRow(), 0).toString());
+        Long id = em_.getIdAt(jTable1.getSelectedRow());
         EntrepriseRequest.getInstance().delete_entreprise(id);
-        if (jTable1.getRowCount() > 0)
-        jTable1.setRowSelectionInterval(0, 0);
-        else
-        {
+        if (jTable1.getRowCount() > 0) {
+            jTable1.setRowSelectionInterval(0, 0);
+        } else {
             jTextField2.setText("");
             jTextArea2.setText("");
             jTextField2.setEnabled(false);
             jTextArea2.setEnabled(false);
+            jButton3.setEnabled(false);
+            jButton2.setEnabled(false);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        jButton1.setEnabled(!jTextField1.getText().equals("") && jComboBox1.getSelectedItem() != null);
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void addListeners() {
         ListSelectionModel cellSelectionModel = jTable1.getSelectionModel();
@@ -329,21 +340,18 @@ public class EditList_view extends javax.swing.JFrame {
                 if (selectedRow >= 0) {
                     jTextField2.setEnabled(true);
                     jTextArea2.setEnabled(true);
-                    jTextField2.setText((String)jTable1.getValueAt(selectedRow, 0));
+                    jTextField2.setText((String) jTable1.getValueAt(selectedRow, 0));
                     jTextArea2.setText((String) jTable1.getValueAt(selectedRow, 1));
                     jButton2.setEnabled(true);
                     jButton3.setEnabled(true);
-                }
-                else
-                {
+                } else {
                     jTextField2.setText("");
                     jTextArea2.setText("");
                     jTextField2.setEnabled(false);
                     jTextArea2.setEnabled(false);
                     jButton2.setEnabled(false);
                     jButton3.setEnabled(false);
-                }   
-                 
+                }
 
             }
 
@@ -360,7 +368,7 @@ public class EditList_view extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+       try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -368,20 +376,20 @@ public class EditList_view extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditList_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditExercice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditList_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditExercice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditList_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditExercice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditList_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditExercice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EditList_view().setVisible(true);
+                new EditEntreprise().setVisible(true);
             }
         });
     }
@@ -414,6 +422,6 @@ public class EditList_view extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel2;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel3;
     // End of variables declaration//GEN-END:variables
-    private EntrepriseModel em_;
-    private AliasStructureAnalytique asa_;
+    private TableEntreprise2 em_;
+    private ComboBoxStructure asa_;
 }

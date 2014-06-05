@@ -5,10 +5,10 @@
  */
 package Views;
 
-import Models.AliasStructureAnalytique;
-import Models.EditStructAnalTableModel;
-import Models.EntrepriseModel;
-import Models.NameEntrepriseModel;
+import Models.ComboBox.ComboBoxStructure;
+import Models.Table.TableStructureEdit;
+import Models.Table.TableEntreprise2;
+import Models.Table.TableEntreprise;
 import Tools.Resizer;
 import comptedit_db.Entreprise;
 import comptedit_db.EntrepriseRequest;
@@ -26,19 +26,19 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Flash
  */
-public class StructAnal_view extends javax.swing.JFrame {
+public class EditStructure extends javax.swing.JFrame {
 
     /**
      * Creates new form Main_window2
      */
-    public StructAnal_view() {
+    public EditStructure() {
         sar_ = StructAnalRequest.getInstance();
 
         initComponents();
 
-        sa_ = new AliasStructureAnalytique(jComboBox2);
-        sa2_ = new AliasStructureAnalytique(jComboBox1);
-        esa_ = new EditStructAnalTableModel(jXTable1, jComboBox1);
+        sa_ = new ComboBoxStructure(jComboBox2);
+        sa2_ = new ComboBoxStructure(jComboBox1);
+        esa_ = new TableStructureEdit(jXTable1, jComboBox1);
 
         sar_.add_fire_component(sa_, jComboBox2);
         jComboBox2.setModel(sa_);
@@ -181,6 +181,7 @@ public class StructAnal_view extends javax.swing.JFrame {
         jXTitledPanel4.setTitle("Outils");
 
         jXButton1.setText("Ajouter une ligne");
+        jXButton1.setEnabled(false);
         jXButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jXButton1ActionPerformed(evt);
@@ -188,6 +189,7 @@ public class StructAnal_view extends javax.swing.JFrame {
         });
 
         jXButton4.setText("Supprimer la ligne");
+        jXButton4.setEnabled(false);
         jXButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jXButton4ActionPerformed(evt);
@@ -212,7 +214,7 @@ public class StructAnal_view extends javax.swing.JFrame {
                 .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jXButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jXTitledPanel2Layout = new javax.swing.GroupLayout(jXTitledPanel2.getContentContainer());
@@ -229,7 +231,7 @@ public class StructAnal_view extends javax.swing.JFrame {
                     .addGroup(jXTitledPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, 0, 1047, Short.MAX_VALUE)))
+                        .addComponent(jComboBox1, 0, 706, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jXTitledPanel2Layout.setVerticalGroup(
@@ -241,8 +243,8 @@ public class StructAnal_view extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jXTitledPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
-                    .addComponent(jXTitledPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jXTitledPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout jXTitledPanel3Layout = new javax.swing.GroupLayout(jXTitledPanel3.getContentContainer());
@@ -294,6 +296,16 @@ public class StructAnal_view extends javax.swing.JFrame {
     }//GEN-LAST:event_jXButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        if (jComboBox1.getSelectedItem() == null)
+        {
+            jXButton1.setEnabled(false);
+            jXButton4.setEnabled(false);
+        }
+        else
+        {
+            jXButton4.setEnabled(true);
+            jXButton1.setEnabled(true);
+        }
         esa_.property_change();
         jXTable1.setModel(esa_);
         jXTable1.revalidate();
@@ -317,13 +329,9 @@ public class StructAnal_view extends javax.swing.JFrame {
             jXTable1.revalidate();
             jXTable1.repaint();
             if (jXTable1.getRowCount() > delete_index)
-            {
                 jXTable1.setRowSelectionInterval((int)delete_index, (int)delete_index);
-            }
             if (jXTable1.getRowCount() == 0)
-            {
                 jComboBox1.setSelectedItem(null);
-            }
 
         }
     }//GEN-LAST:event_jXButton4ActionPerformed
@@ -349,20 +357,20 @@ public class StructAnal_view extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StructAnal_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditStructure.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StructAnal_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditStructure.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StructAnal_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditStructure.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StructAnal_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EditStructure.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StructAnal_view().setVisible(true);
+                new EditStructure().setVisible(true);
             }
         });
     }
@@ -386,8 +394,8 @@ public class StructAnal_view extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel3;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel4;
     // End of variables declaration//GEN-END:variables
-    private AliasStructureAnalytique sa_;
-    private AliasStructureAnalytique sa2_;
-    private EditStructAnalTableModel esa_;
+    private ComboBoxStructure sa_;
+    private ComboBoxStructure sa2_;
+    private TableStructureEdit esa_;
     private StructAnalRequest sar_;
 }

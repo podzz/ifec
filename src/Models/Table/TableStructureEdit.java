@@ -3,26 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Models;
+package Models.Table;
 
+import Models.AbstractModel;
 import comptedit_db.StructAnalRequest;
 import comptedit_db.StructureAnalytique;
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 /**
  *
  * @author Flash
  */
-public class EditStructAnalTableModel implements TableModel, AbstractModel {
+public class TableStructureEdit implements TableModel, AbstractModel {
 
     private JTable jta_;
     private List<StructureAnalytique> lsa_;
@@ -30,7 +27,7 @@ public class EditStructAnalTableModel implements TableModel, AbstractModel {
     private JComboBox jcb_;
     private final String[] entetes = {"Section", "Compte analytique", "Structure analytique"};
 
-    public EditStructAnalTableModel(JTable jta, JComboBox jcb) {
+    public TableStructureEdit(JTable jta, JComboBox jcb) {
         jta_ = jta;
         jcb_ = jcb;
         lsa_ = new ArrayList<StructureAnalytique>();

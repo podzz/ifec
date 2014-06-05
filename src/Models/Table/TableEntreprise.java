@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Models;
+package Models.Table;
 
+import Models.AbstractModel;
 import comptedit_db.Entreprise;
 import comptedit_db.EntrepriseRequest;
 import java.awt.event.ActionEvent;
@@ -13,11 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import org.jdesktop.swingx.JXSearchField;
 
@@ -25,7 +22,7 @@ import org.jdesktop.swingx.JXSearchField;
  *
  * @author Flash
  */
-public class NameEntrepriseModel extends AbstractTableModel implements AbstractModel {
+public class TableEntreprise extends AbstractTableModel implements AbstractModel {
 
     private final String[] entetes = {"Nom"};
     private final EntrepriseRequest er_ = EntrepriseRequest.getInstance();
@@ -33,7 +30,7 @@ public class NameEntrepriseModel extends AbstractTableModel implements AbstractM
     private JXSearchField search_ = null;
     private JTable table_ = null;
 
-    public NameEntrepriseModel() {
+    public TableEntreprise() {
         le_ = er_.list_entreprise();
     }
 

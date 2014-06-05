@@ -112,6 +112,7 @@ public class EntrepriseRequest {
     }
 
     public void update_entreprise(long id, Entreprise update_entreprise) {
+
         try {
             Session session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
@@ -124,6 +125,21 @@ public class EntrepriseRequest {
         } catch (HibernateException e) {
             e.printStackTrace();
         }
+    }
+
+    public Entreprise get_entreprise_by_id(long id) {
+        List<Entreprise> l = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            l = session.createQuery("from Entreprise WHERE ID_ENTREPRISE=" + id).list();
+
+            session.getTransaction().commit();
+            fire_component();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return l.get(0);
     }
 
     public void fire_component() {

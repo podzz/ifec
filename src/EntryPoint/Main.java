@@ -1,8 +1,8 @@
 package EntryPoint;
 
 import Views.Desktop_view;
-import Views.EditList_view;
-import Views.EditList_view;
+import Views.EditEntreprise;
+import Views.EditEntreprise;
 import java.awt.Color;
 import java.awt.EventQueue;
 import javax.swing.UIManager;

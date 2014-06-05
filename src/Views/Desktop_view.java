@@ -6,10 +6,10 @@
 
 package Views;
 
-import Models.ListEntrepriseModel;
-import Models.NameEntrepriseModel;
+import Models.ComboBox.ComboBoxEntreprise;
+import Models.Table.TableEntreprise;
 import Tools.Resizer;
-import Views.EditList_view;
+import Views.EditEntreprise;
 import comptedit_db.EntrepriseRequest;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -29,11 +29,15 @@ public class Desktop_view extends javax.swing.JFrame {
      * Creates new form Desktop_view
      */
     public Desktop_view() {
-        em_ = new NameEntrepriseModel();
+        em_ = new TableEntreprise();
         initComponents();
         EntrepriseRequest.getInstance().add_fire_component(em_,jTable1);
         em_.setSearch(jXSearchField1);
         em_.setTable(jTable1);
+       
+        jXTaskPane5.add(new EditStructure().getContentPane());
+        jXTaskPane6.add(new EditEntreprise().getContentPane());
+        jXTaskPane7.add(new EditExercice().getContentPane());
         
         addListeners();
     }
@@ -70,6 +74,12 @@ public class Desktop_view extends javax.swing.JFrame {
         jXButton2 = new org.jdesktop.swingx.JXButton();
         jXButton3 = new org.jdesktop.swingx.JXButton();
         jXButton4 = new org.jdesktop.swingx.JXButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jXTaskPaneContainer3 = new org.jdesktop.swingx.JXTaskPaneContainer();
+        jXTaskPane5 = new org.jdesktop.swingx.JXTaskPane();
+        jXTaskPane6 = new org.jdesktop.swingx.JXTaskPane();
+        jXTaskPane7 = new org.jdesktop.swingx.JXTaskPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -157,6 +167,8 @@ public class Desktop_view extends javax.swing.JFrame {
             .addComponent(jScrollPane1)
         );
 
+        jXTaskPane4.setSpecial(true);
+        jXTaskPane4.setTitle("Aide");
         jXTaskPane4.getContentPane().add(jXTipOfTheDay1);
 
         jXTitledPanel4.setTitle("Actions");
@@ -220,6 +232,40 @@ public class Desktop_view extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Accueil", Resizer.get_resize_icon("Icon/home.png", 50, 50)
             , jPanel1);
+
+        jXTaskPane5.setCollapsed(true);
+        jXTaskPane5.setTitle("Edition des structures analytique");
+        jXTaskPaneContainer3.add(jXTaskPane5);
+
+        jXTaskPane6.setCollapsed(true);
+        jXTaskPane6.setTitle("Edition des entreprises");
+        jXTaskPaneContainer3.add(jXTaskPane6);
+
+        jXTaskPane7.setCollapsed(true);
+        jXTaskPane7.setTitle("Edition d'exercice");
+        jXTaskPaneContainer3.add(jXTaskPane7);
+
+        jScrollPane4.setViewportView(jXTaskPaneContainer3);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1091, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 834, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Edition", Resizer.get_resize_icon("Icon/modification.png", 50, 50)
+            , jPanel2);
 
         jMenu1.setText("Fichier");
 
@@ -292,7 +338,7 @@ public class Desktop_view extends javax.swing.JFrame {
     }
     
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        EditList_view mw = new EditList_view();
+        EditEntreprise mw = new EditEntreprise();
         mw.setLocation(100,100);
         mw.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -306,7 +352,7 @@ public class Desktop_view extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        StructAnal_view mw = new StructAnal_view();
+        EditStructure mw = new EditStructure();
         mw.setLocation(100,100);
         mw.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
@@ -354,9 +400,11 @@ public class Desktop_view extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private org.jdesktop.swingx.JXButton jXButton1;
@@ -369,13 +417,17 @@ public class Desktop_view extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXTaskPane jXTaskPane2;
     private org.jdesktop.swingx.JXTaskPane jXTaskPane3;
     private org.jdesktop.swingx.JXTaskPane jXTaskPane4;
+    private org.jdesktop.swingx.JXTaskPane jXTaskPane5;
+    private org.jdesktop.swingx.JXTaskPane jXTaskPane6;
+    private org.jdesktop.swingx.JXTaskPane jXTaskPane7;
     private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer1;
     private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer2;
+    private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer3;
     private org.jdesktop.swingx.JXTipOfTheDay jXTipOfTheDay1;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel1;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel2;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel3;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel4;
     // End of variables declaration//GEN-END:variables
-    private NameEntrepriseModel em_;
+    private TableEntreprise em_;
 }
