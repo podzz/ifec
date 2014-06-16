@@ -3,19 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Views;
 
-import Models.ComboBox.ComboBoxEntreprise;
+import Models.List.ListExercice;
+import Models.List.ListSelectionListenerEntreprise;
 import Models.Table.TableEntreprise;
+import Renderer.List.ListRenderer;
+import Renderer.TabbedPane.TabUI;
 import Tools.Resizer;
-import Views.EditEntreprise;
+import comptedit_db.Entreprise;
 import comptedit_db.EntrepriseRequest;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import javax.swing.Icon;
-import javax.swing.JLabel;
+import comptedit_db.Exercice;
+import comptedit_db.ExerciceRequest;
+import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -30,15 +34,50 @@ public class Desktop_view extends javax.swing.JFrame {
      */
     public Desktop_view() {
         em_ = new TableEntreprise();
+
         initComponents();
-        EntrepriseRequest.getInstance().add_fire_component(em_,jTable1);
+        
+        TabUI ui = new TabUI();
+        jTabbedPane1.setUI(ui);
+        EntrepriseRequest.getInstance().add_fire_component(em_, jTable1);
         em_.setSearch(jXSearchField1);
         em_.setTable(jTable1);
-       
-        jXTaskPane5.add(new EditStructure().getContentPane());
+
+        le_ = new ListExercice(jXList1);
+        jXList1.setModel(le_);
+        jXList1.setCellRenderer(new ListRenderer());
+
+        jXList1.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+
+                    boolean check = false;
+                    for (int i = 0; i < jXList1.getVisibleRowCount(); i++) {
+                        if (jXList1.getCellBounds(i, i) != null) {
+                            if (jXList1.getCellBounds(i, i).contains(e.getPoint())) {
+                                check = true;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                    if (check) {
+                        jXList1.setSelectedIndex(jXList1.locationToIndex(e.getPoint()));
+                        PopUpDesktop dv = new PopUpDesktop(jTabbedPane1, ((TableEntreprise)jTable1.getModel()).getEntreprise(), ((ListExercice) jXList1.getModel()).getExercice());
+                        dv.show(e.getComponent(), e.getX(), e.getY());
+                    }
+                }
+            }
+        });
+        ExerciceRequest.getInstance().add_fire_component(le_, jXList1);
+
+        ListSelectionModel listSelectionModel = jTable1.getSelectionModel();
+        listSelectionModel.addListSelectionListener(new ListSelectionListenerEntreprise(le_, jTable1));
+
         jXTaskPane6.add(new EditEntreprise().getContentPane());
         jXTaskPane7.add(new EditExercice().getContentPane());
-        
+        jPanel3.add(new EditStructure().getContentPane(), BorderLayout.CENTER);
+
         addListeners();
     }
 
@@ -53,12 +92,6 @@ public class Desktop_view extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jXTitledPanel3 = new org.jdesktop.swingx.JXTitledPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jXTaskPaneContainer1 = new org.jdesktop.swingx.JXTaskPaneContainer();
-        jXTaskPane1 = new org.jdesktop.swingx.JXTaskPane();
-        jXTaskPane2 = new org.jdesktop.swingx.JXTaskPane();
-        jXTaskPane3 = new org.jdesktop.swingx.JXTaskPane();
         jXTitledPanel2 = new org.jdesktop.swingx.JXTitledPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -66,20 +99,12 @@ public class Desktop_view extends javax.swing.JFrame {
         jXTitledPanel1 = new org.jdesktop.swingx.JXTitledPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jXList1 = new org.jdesktop.swingx.JXList();
-        jXTaskPane4 = new org.jdesktop.swingx.JXTaskPane();
-        jXTipOfTheDay1 = new org.jdesktop.swingx.JXTipOfTheDay();
-        jXTitledPanel4 = new org.jdesktop.swingx.JXTitledPanel();
-        jXTaskPaneContainer2 = new org.jdesktop.swingx.JXTaskPaneContainer();
-        jXButton1 = new org.jdesktop.swingx.JXButton();
-        jXButton2 = new org.jdesktop.swingx.JXButton();
-        jXButton3 = new org.jdesktop.swingx.JXButton();
-        jXButton4 = new org.jdesktop.swingx.JXButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jXTaskPaneContainer3 = new org.jdesktop.swingx.JXTaskPaneContainer();
-        jXTaskPane5 = new org.jdesktop.swingx.JXTaskPane();
         jXTaskPane6 = new org.jdesktop.swingx.JXTaskPane();
         jXTaskPane7 = new org.jdesktop.swingx.JXTaskPane();
+        jPanel3 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -90,29 +115,7 @@ public class Desktop_view extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(977, 537));
 
-        jXTitledPanel3.setTitle(" Status de l'exercice");
-
-        jXTaskPane1.setCollapsed(true);
-        jXTaskPaneContainer1.add(jXTaskPane1);
-
-        jXTaskPane2.setCollapsed(true);
-        jXTaskPaneContainer1.add(jXTaskPane2);
-
-        jXTaskPane3.setCollapsed(true);
-        jXTaskPaneContainer1.add(jXTaskPane3);
-
-        jScrollPane3.setViewportView(jXTaskPaneContainer1);
-
-        javax.swing.GroupLayout jXTitledPanel3Layout = new javax.swing.GroupLayout(jXTitledPanel3.getContentContainer());
-        jXTitledPanel3.getContentContainer().setLayout(jXTitledPanel3Layout);
-        jXTitledPanel3Layout.setHorizontalGroup(
-            jXTitledPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
-        );
-        jXTitledPanel3Layout.setVerticalGroup(
-            jXTitledPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
-        );
+        jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
 
         jXTitledPanel2.setTitle("Liste d'entreprises");
 
@@ -144,7 +147,8 @@ public class Desktop_view extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jXSearchField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jXTitledPanel1.setTitle("Liste d'exercices");
@@ -154,47 +158,24 @@ public class Desktop_view extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
+        jXList1.setFocusable(false);
         jScrollPane1.setViewportView(jXList1);
 
         javax.swing.GroupLayout jXTitledPanel1Layout = new javax.swing.GroupLayout(jXTitledPanel1.getContentContainer());
         jXTitledPanel1.getContentContainer().setLayout(jXTitledPanel1Layout);
         jXTitledPanel1Layout.setHorizontalGroup(
             jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+            .addGroup(jXTitledPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jXTitledPanel1Layout.setVerticalGroup(
             jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-        );
-
-        jXTaskPane4.setSpecial(true);
-        jXTaskPane4.setTitle("Aide");
-        jXTaskPane4.getContentPane().add(jXTipOfTheDay1);
-
-        jXTitledPanel4.setTitle("Actions");
-        jXTitledPanel4.setToolTipText("");
-
-        jXButton1.setText("jXButton1");
-        jXTaskPaneContainer2.add(jXButton1);
-
-        jXButton2.setText("jXButton2");
-        jXTaskPaneContainer2.add(jXButton2);
-
-        jXButton3.setText("jXButton3");
-        jXTaskPaneContainer2.add(jXButton3);
-
-        jXButton4.setText("jXButton4");
-        jXTaskPaneContainer2.add(jXButton4);
-
-        javax.swing.GroupLayout jXTitledPanel4Layout = new javax.swing.GroupLayout(jXTitledPanel4.getContentContainer());
-        jXTitledPanel4.getContentContainer().setLayout(jXTitledPanel4Layout);
-        jXTitledPanel4Layout.setHorizontalGroup(
-            jXTitledPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jXTaskPaneContainer2, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-        );
-        jXTitledPanel4Layout.setVerticalGroup(
-            jXTitledPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jXTaskPaneContainer2, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+            .addGroup(jXTitledPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -203,39 +184,19 @@ public class Desktop_view extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jXTaskPane4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jXTitledPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jXTitledPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jXTitledPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jXTitledPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jXTitledPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jXTitledPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jXTaskPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jXTitledPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jXTitledPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jXTitledPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jXTitledPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addComponent(jXTitledPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jXTitledPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Accueil", Resizer.get_resize_icon("Icon/home.png", 50, 50)
             , jPanel1);
-
-        jXTaskPane5.setCollapsed(true);
-        jXTaskPane5.setTitle("Edition des structures analytique");
-        jXTaskPaneContainer3.add(jXTaskPane5);
 
         jXTaskPane6.setCollapsed(true);
         jXTaskPane6.setTitle("Edition des entreprises");
@@ -253,19 +214,23 @@ public class Desktop_view extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1091, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 834, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 767, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Edition", Resizer.get_resize_icon("Icon/modification.png", 50, 50)
+        jTabbedPane1.addTab("Edition générale", Resizer.get_resize_icon("Icon/modification.png", 50, 50)
             , jPanel2);
+
+        jPanel3.setLayout(new java.awt.BorderLayout());
+        jTabbedPane1.addTab("Edition de structure analytique", Resizer.get_resize_icon("Icon/modification_entreprise.png", 50, 50)
+            , jPanel3);
 
         jMenu1.setText("Fichier");
 
@@ -311,7 +276,8 @@ public class Desktop_view extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1))
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
 
         pack();
@@ -320,76 +286,44 @@ public class Desktop_view extends javax.swing.JFrame {
     private void addListeners() {
         ListSelectionModel cellSelectionModel = jTable1.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-       
+
         cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 String selectedData = null;
 
                 int selectedRow = jTable1.getSelectedRow();
-               
-                 
 
             }
 
         });
-        
-        
 
     }
-    
+
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         EditEntreprise mw = new EditEntreprise();
-        mw.setLocation(100,100);
+        mw.setLocation(100, 100);
         mw.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jXSearchField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jXSearchField1KeyReleased
-       em_.property_change();
+        em_.property_change();
     }//GEN-LAST:event_jXSearchField1KeyReleased
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-            System.exit(0);
+        System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         EditStructure mw = new EditStructure();
-        mw.setLocation(100,100);
+        mw.setLocation(100, 100);
         mw.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Desktop_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Desktop_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Desktop_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Desktop_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Desktop_view().setVisible(true);
-            }
-        });
+    
+    public void addAffectationTab(String title, Entreprise entreprise, Exercice exercice)
+    {
+        jTabbedPane1.addTab(title, new EditAffectation(entreprise, exercice));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -401,33 +335,20 @@ public class Desktop_view extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private org.jdesktop.swingx.JXButton jXButton1;
-    private org.jdesktop.swingx.JXButton jXButton2;
-    private org.jdesktop.swingx.JXButton jXButton3;
-    private org.jdesktop.swingx.JXButton jXButton4;
     private org.jdesktop.swingx.JXList jXList1;
     private org.jdesktop.swingx.JXSearchField jXSearchField1;
-    private org.jdesktop.swingx.JXTaskPane jXTaskPane1;
-    private org.jdesktop.swingx.JXTaskPane jXTaskPane2;
-    private org.jdesktop.swingx.JXTaskPane jXTaskPane3;
-    private org.jdesktop.swingx.JXTaskPane jXTaskPane4;
-    private org.jdesktop.swingx.JXTaskPane jXTaskPane5;
     private org.jdesktop.swingx.JXTaskPane jXTaskPane6;
     private org.jdesktop.swingx.JXTaskPane jXTaskPane7;
-    private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer1;
-    private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer2;
     private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer3;
-    private org.jdesktop.swingx.JXTipOfTheDay jXTipOfTheDay1;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel1;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel2;
-    private org.jdesktop.swingx.JXTitledPanel jXTitledPanel3;
-    private org.jdesktop.swingx.JXTitledPanel jXTitledPanel4;
     // End of variables declaration//GEN-END:variables
     private TableEntreprise em_;
+    private ListExercice le_;
 }

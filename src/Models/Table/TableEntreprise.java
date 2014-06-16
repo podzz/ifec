@@ -84,9 +84,6 @@ public class TableEntreprise extends AbstractTableModel implements AbstractModel
         } else {
             le_ = er_.list_entreprise_begin_with(search_.getText());
         }
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        System.out.println(dateFormat.format(date));
     }
 
     @Override
@@ -96,5 +93,12 @@ public class TableEntreprise extends AbstractTableModel implements AbstractModel
             table_.revalidate();
             table_.repaint();
         }
+    }
+    
+    public Entreprise getEntreprise()
+    {
+        if (table_.getSelectedRow() >= 0)
+            return le_.get(table_.getSelectedRow());
+        return null;
     }
 }

@@ -65,5 +65,8 @@
         <property name="IDevise" type="string">
             <column name="I_DEVISE" length="65535" />
         </property>
+        <property name="affectation" type="string">
+            <column name="AFFECTATION" length="4" />
+        </property>
     </class>
 </hibernate-mapping>

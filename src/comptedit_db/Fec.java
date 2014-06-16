@@ -30,11 +30,12 @@ public class Fec  implements java.io.Serializable {
      private Date validDate;
      private Float montantDevise;
      private String IDevise;
+     private String affectation;
 
     public Fec() {
     }
 
-    public Fec(Integer fec, String journalCode, String journalLib, Integer ecritureNum, Date ecritureDate, String compteNum, String compteLib, String compteAuxNum, String compteAuxLib, String pieceRef, Date pieceDate, String ecritureLib, Float montant, Character sens, String ecritureLet, Date dateLet, Date validDate, Float montantDevise, String IDevise) {
+    public Fec(Integer fec, String journalCode, String journalLib, Integer ecritureNum, Date ecritureDate, String compteNum, String compteLib, String compteAuxNum, String compteAuxLib, String pieceRef, Date pieceDate, String ecritureLib, Float montant, Character sens, String ecritureLet, Date dateLet, Date validDate, Float montantDevise, String IDevise, String affectation) {
        this.fec = fec;
        this.journalCode = journalCode;
        this.journalLib = journalLib;
@@ -54,6 +55,7 @@ public class Fec  implements java.io.Serializable {
        this.validDate = validDate;
        this.montantDevise = montantDevise;
        this.IDevise = IDevise;
+       this.affectation = affectation;
     }
    
     public Long getIdFec() {
@@ -195,6 +197,16 @@ public class Fec  implements java.io.Serializable {
     
     public void setIDevise(String IDevise) {
         this.IDevise = IDevise;
+    }
+    
+    public String getAffectation()
+    {
+        return this.affectation;
+    }
+    
+    public void setAffectation(String affectation)
+    {
+        this.affectation = affectation;
     }
 
 

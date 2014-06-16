@@ -5,15 +5,25 @@ public class FecModel
 	public enum FecField
 	{
            
-		Journal_code, Journal_lib, Ecriture_num, Ecriture_date, Compte_num, Compte_lib, Compte_aux_num, Compte_aux_lib, Piece_ref, Piece_date, Ecriture_lib, Montant, Sens, Ecriture_let, Date_let, Valid_date, Montant_devise, IDevise
-	}
+		Journal_code, Journal_lib, Ecriture_num, Ecriture_date, Compte_num, Compte_lib, Compte_aux_num, Compte_aux_lib, Piece_ref, Piece_date, Ecriture_lib, Montant, Sens, Ecriture_let, Date_let, Valid_date, Montant_devise, IDevise, Affectation
+	
+        
+        }
 
-	private String[] array_field = null;
+        
+	private Object[] array_field = null;
 
 	public FecModel(String line)
 	{
 		array_field = line.split("\\t");
+                array_field[18] = null;
 	}
+        
+        public FecModel(Object[] l)
+        {
+            array_field = l;
+        }
+        
 
 	public Object getField(FecField ff)
 	{
@@ -55,6 +65,8 @@ public class FecModel
 			return array_field[16];
 		case IDevise:
 			return array_field[17];
+                case Affectation:
+                        return array_field[18];
 		default:
 			return null;
 		}
@@ -100,6 +112,8 @@ public class FecModel
 			return array_field[16];
 		case 17:
 			return array_field[17];
+                case 18:
+                        return array_field[18];
 		default:
 			return null;
 		}

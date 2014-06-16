@@ -17,7 +17,7 @@ import javax.swing.event.ListDataListener;
  *
  * @author Flash
  */
-public class ComboBoxEntreprise implements  AbstractModel, ComboBoxModel {
+public class ComboBoxEntreprise implements AbstractModel, ComboBoxModel {
 
     private final EntrepriseRequest er_;
     private List<Entreprise> lsa_ = null;
@@ -28,9 +28,10 @@ public class ComboBoxEntreprise implements  AbstractModel, ComboBoxModel {
         er_ = EntrepriseRequest.getInstance();
         jcb_ = jcb;
         lsa_ = er_.list_entreprise();
-        if (jcb.getSelectedItem() != null)
+        if (jcb.getSelectedItem() != null) {
             setSelectedItem(jcb.getSelectedItem());
-        
+        }
+
     }
 
     @Override
@@ -55,28 +56,20 @@ public class ComboBoxEntreprise implements  AbstractModel, ComboBoxModel {
 
     @Override
     public void addListDataListener(ListDataListener l) {
-
     }
 
     @Override
     public void removeListDataListener(ListDataListener l) {
     }
 
-    public void setList() {
-       jcb_.setModel(new ComboBoxEntreprise(jcb_));
-    }
-
-    public long get_id_selected()
-    {
+    public long get_id_selected() {
         return lsa_.get(jcb_.getSelectedIndex()).getIdEntreprise();
     }
-    
+
     @Override
     public void property_change() {
-        System.out.println("fire jcombobox!");
-        setList();
-        
+        jcb_.setModel(new ComboBoxEntreprise(jcb_));
+
     }
 
-   
 }

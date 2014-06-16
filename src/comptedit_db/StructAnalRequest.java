@@ -87,6 +87,38 @@ public class StructAnalRequest {
         return l_result;
     }
 
+    public void delete_all_alias(String alias)
+    {
+        List<StructureAnalytique> l = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            l = session.createQuery("from StructureAnalytique ORDER BY ALIAS_STRUCTURE WHERE ALIAS_STRUCTURE=\"" + alias + "\"").list();
+            for (StructureAnalytique sa : l)
+            {
+                session.delete(sa);
+            }
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void add_all(List<StructureAnalytique> l)
+    {
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            for (StructureAnalytique sa : l)
+            {
+                session.save(sa);
+            }
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public List<StructureAnalytique> list_structanal_on_alias(String alias) {
         List<StructureAnalytique> l = null;
         try {

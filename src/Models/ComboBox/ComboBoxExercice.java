@@ -71,13 +71,11 @@ public class ComboBoxExercice implements AbstractModel, ComboBoxModel {
     }
 
     public void setList() {
-        jcb_.setModel(new ComboBoxExercice(jcb_));
     }
 
     @Override
     public void property_change() {
-        System.out.println("fire jcombobox!");
-        setList();
+        jcb_.setModel(new ComboBoxExercice(jcb_));
     }
 
 }

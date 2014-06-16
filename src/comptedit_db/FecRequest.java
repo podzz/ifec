@@ -73,6 +73,20 @@ public class FecRequest {
             e.printStackTrace();
         }
     }
+    
+    public List<Fec> getListFecOn(int fec_id)
+    {
+        List<Fec> l = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            l = session.createQuery("from Fec WHERE FEC=" + fec_id).list();
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return l;
+     }
 
     public void fire_component() {
         for (Tuple<AbstractModel, JComponent> jc : l) {

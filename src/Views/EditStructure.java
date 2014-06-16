@@ -15,6 +15,7 @@ import comptedit_db.EntrepriseRequest;
 import comptedit_db.StructAnalRequest;
 import comptedit_db.StructureAnalytique;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,7 +39,7 @@ public class EditStructure extends javax.swing.JFrame {
 
         sa_ = new ComboBoxStructure(jComboBox2);
         sa2_ = new ComboBoxStructure(jComboBox1);
-        esa_ = new TableStructureEdit(jXTable1, jComboBox1);
+        est_ = new EditStructureTree();
 
         sar_.add_fire_component(sa_, jComboBox2);
         jComboBox2.setModel(sa_);
@@ -52,8 +53,8 @@ public class EditStructure extends javax.swing.JFrame {
         jComboBox1.repaint();
         jComboBox1.setSelectedItem(null);
 
-        sar_.add_fire_component(esa_, jXTable1);
-        jXTable1.setModel(esa_);
+        jXPanel1.add(est_);
+
         addListeners();
 
     }
@@ -76,13 +77,10 @@ public class EditStructure extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jXButton2 = new org.jdesktop.swingx.JXButton();
         jXTitledPanel2 = new org.jdesktop.swingx.JXTitledPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jXTable1 = new org.jdesktop.swingx.JXTable();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        jXTitledPanel4 = new org.jdesktop.swingx.JXTitledPanel();
+        jXPanel1 = new org.jdesktop.swingx.JXPanel();
         jXButton1 = new org.jdesktop.swingx.JXButton();
-        jXButton4 = new org.jdesktop.swingx.JXButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Edition de liste");
@@ -153,21 +151,6 @@ public class EditStructure extends javax.swing.JFrame {
 
         jXTitledPanel2.setTitle("Edition");
 
-        jXTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jXTable1.setSortable(false);
-        jXTable1.setSortsOnUpdates(false);
-        jScrollPane1.setViewportView(jXTable1);
-
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,44 +161,14 @@ public class EditStructure extends javax.swing.JFrame {
         jLabel3.setText("Selection du modèle à éditer :");
         jLabel3.setToolTipText("");
 
-        jXTitledPanel4.setTitle("Outils");
+        jXPanel1.setLayout(new java.awt.BorderLayout());
 
-        jXButton1.setText("Ajouter une ligne");
-        jXButton1.setEnabled(false);
+        jXButton1.setText("Sauvegarder");
         jXButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jXButton1ActionPerformed(evt);
             }
         });
-
-        jXButton4.setText("Supprimer la ligne");
-        jXButton4.setEnabled(false);
-        jXButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXButton4ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jXTitledPanel4Layout = new javax.swing.GroupLayout(jXTitledPanel4.getContentContainer());
-        jXTitledPanel4.getContentContainer().setLayout(jXTitledPanel4Layout);
-        jXTitledPanel4Layout.setHorizontalGroup(
-            jXTitledPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jXTitledPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jXTitledPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jXButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jXButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jXTitledPanel4Layout.setVerticalGroup(
-            jXTitledPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jXTitledPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jXButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(7, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout jXTitledPanel2Layout = new javax.swing.GroupLayout(jXTitledPanel2.getContentContainer());
         jXTitledPanel2.getContentContainer().setLayout(jXTitledPanel2Layout);
@@ -225,26 +178,25 @@ public class EditStructure extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jXTitledPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jXTitledPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jXTitledPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jXTitledPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, 0, 706, Short.MAX_VALUE)))
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jXButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jXPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jXTitledPanel2Layout.setVerticalGroup(
             jXTitledPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jXTitledPanel2Layout.createSequentialGroup()
+            .addGroup(jXTitledPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jXTitledPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jXTitledPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jXTitledPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                .addComponent(jXPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jXTitledPanel3Layout = new javax.swing.GroupLayout(jXTitledPanel3.getContentContainer());
@@ -278,14 +230,18 @@ public class EditStructure extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jXButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton2ActionPerformed
-        StructureAnalytique sa = new StructureAnalytique(jTextField1.getText(), "", "", "");
+        StructureAnalytique sa = new StructureAnalytique(jTextField1.getText(), "Default", "0000", "Default");
         if (sar_.add_structanal(sa)) {
             if (jComboBox2.getSelectedItem() != null) {
                 String alias = (String) jComboBox2.getSelectedItem();
                 List<StructureAnalytique> importation = sar_.list_structanal_on_alias(alias);
-                for (StructureAnalytique imp : importation) {
-                    sar_.add_row_to_with(sa.getAliasStructure(), imp.getSection(), imp.getCompteAnalytique(), imp.getLibelle());
+                List<StructureAnalytique> refresh = new ArrayList<StructureAnalytique>();
+                for (StructureAnalytique cpy : importation)
+                {
+                    StructureAnalytique new_s = new StructureAnalytique(jTextField1.getText(), cpy.getSection(), cpy.getCompteAnalytique(), cpy.getLibelle());
+                    refresh.add(new_s);
                 }
+                sar_.add_all(refresh);
             }
             jTextField1.setText("");
             jComboBox2.setSelectedItem(null);
@@ -296,45 +252,15 @@ public class EditStructure extends javax.swing.JFrame {
     }//GEN-LAST:event_jXButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (jComboBox1.getSelectedItem() == null)
-        {
-            jXButton1.setEnabled(false);
-            jXButton4.setEnabled(false);
+        if (jComboBox1.getSelectedItem() != null) {
+            est_.loadTree((String) jComboBox1.getSelectedItem());
         }
-        else
-        {
-            jXButton4.setEnabled(true);
-            jXButton1.setEnabled(true);
-        }
-        esa_.property_change();
-        jXTable1.setModel(esa_);
-        jXTable1.revalidate();
-        jXTable1.repaint();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
-        sar_.add_row_to((String) jComboBox1.getSelectedItem());
-        jXTable1.setModel(esa_);
-        jXTable1.revalidate();
-        jXTable1.repaint();
-
+        est_.saveTree();
+        jComboBox1.setSelectedItem(null);
     }//GEN-LAST:event_jXButton1ActionPerformed
-
-    private void jXButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton4ActionPerformed
-        
-        if (jXTable1.getSelectedRow() >= 0) {
-            long delete_index = jXTable1.getSelectedRow();
-            sar_.delete_row(esa_.get_id_selected());
-            jXTable1.setModel(esa_);
-            jXTable1.revalidate();
-            jXTable1.repaint();
-            if (jXTable1.getRowCount() > delete_index)
-                jXTable1.setRowSelectionInterval((int)delete_index, (int)delete_index);
-            if (jXTable1.getRowCount() == 0)
-                jComboBox1.setSelectedItem(null);
-
-        }
-    }//GEN-LAST:event_jXButton4ActionPerformed
 
     private void addListeners() {
 
@@ -383,19 +309,16 @@ public class EditStructure extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private org.jdesktop.swingx.JXButton jXButton1;
     private org.jdesktop.swingx.JXButton jXButton2;
-    private org.jdesktop.swingx.JXButton jXButton4;
-    private org.jdesktop.swingx.JXTable jXTable1;
+    private org.jdesktop.swingx.JXPanel jXPanel1;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel1;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel2;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel3;
-    private org.jdesktop.swingx.JXTitledPanel jXTitledPanel4;
     // End of variables declaration//GEN-END:variables
     private ComboBoxStructure sa_;
     private ComboBoxStructure sa2_;
-    private TableStructureEdit esa_;
     private StructAnalRequest sar_;
+    private EditStructureTree est_;
 }

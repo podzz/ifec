@@ -17,7 +17,7 @@ import javax.swing.event.ListDataListener;
  *
  * @author Flash
  */
-public class ComboBoxStructure implements  AbstractModel, ComboBoxModel {
+public class ComboBoxStructure implements AbstractModel, ComboBoxModel {
 
     private final StructAnalRequest sa_ = StructAnalRequest.getInstance();
     private List<StructureAnalytique> lsa_ = null;
@@ -27,9 +27,10 @@ public class ComboBoxStructure implements  AbstractModel, ComboBoxModel {
     public ComboBoxStructure(JComboBox jcb) {
         jcb_ = jcb;
         lsa_ = sa_.list_structanal();
-        if (jcb.getSelectedItem() != null)
+        if (jcb.getSelectedItem() != null) {
             setSelectedItem(jcb.getSelectedItem());
-        
+        }
+
     }
 
     @Override
@@ -62,15 +63,11 @@ public class ComboBoxStructure implements  AbstractModel, ComboBoxModel {
     }
 
     public void setList() {
-       jcb_.setModel(new ComboBoxStructure(jcb_));
     }
 
     @Override
     public void property_change() {
-        System.out.println("fire jcombobox!");
-        setList();
-        
+        jcb_.setModel(new ComboBoxStructure(jcb_));
     }
 
-   
 }
