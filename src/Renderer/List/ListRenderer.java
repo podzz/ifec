@@ -12,6 +12,7 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -28,7 +29,8 @@ public class ListRenderer implements ListCellRenderer<Object>{
         if (isSelected)
             pan.setBackground(new Color(102,180,222, 125));
         else
-            pan.setBackground(Color.WHITE);
+            pan.setBackground(Color.lightGray);
+        pan.setBorder(new LineBorder(Color.BLACK));
         return pan;
     }
     

@@ -65,11 +65,15 @@ public class ListExercice extends AbstractListModel implements AbstractModel, Li
                if ((long)e.getEntreprise() == selected_.getIdEntreprise())
                    refresh_list.add(e);
             le_ = refresh_list;
-            jl_.updateUI();
         }
+        else
+            le_ = new ArrayList<Exercice>();
+        jl_.updateUI();
+        jl_.revalidate();
+        jl_.repaint();
     }
 
-    void setSelected(Entreprise e) {
+    public void setSelected(Entreprise e) {
       selected_ = e;
       property_change();
     }

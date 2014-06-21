@@ -6,8 +6,10 @@
 package Views;
 
 import Models.Table.TableFec;
+import Renderer.Table.ShowFECRenderer;
 import comptedit_db.Exercice;
 import comptedit_db.FecRequest;
+import java.util.Date;
 
 /**
  *
@@ -37,7 +39,11 @@ public class ShowFEC extends javax.swing.JPanel {
         thr.start();
         
         
-        
+        jXTable1.setDefaultRenderer(Integer.class, new ShowFECRenderer());
+        jXTable1.setDefaultRenderer(String.class, new ShowFECRenderer());
+        jXTable1.setDefaultRenderer(Date.class, new ShowFECRenderer());
+        jXTable1.setDefaultRenderer(Float.class, new ShowFECRenderer());
+        jXTable1.setDefaultRenderer(Character.class, new ShowFECRenderer());
     }
 
     /**

@@ -15,7 +15,9 @@ public class FecModel
 
 	public FecModel(String line)
 	{
-		array_field = line.split("\\t");
+            array_field = new Object[19];
+                for (int i = 0; i < 18; i++)
+                    array_field[i] = line.split("\\t")[i];
                 array_field[18] = null;
 	}
         

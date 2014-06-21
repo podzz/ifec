@@ -26,9 +26,14 @@ public class ListSelectionListenerEntreprise implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
+        
         if (jtb_.getSelectedRow() >= 0)
         {
             le_.setSelected(((TableEntreprise)jtb_.getModel()).getEntreprise());
+        }
+        else
+        {
+            le_.setSelected(null);
         }
     }
     

@@ -30,7 +30,7 @@ public class ListCompteRenderer extends JLabel implements ListCellRenderer<Objec
         if (isSelected) {
             setBackground(new Color(102, 180, 222, 125));
         } else {
-            setBackground(Color.WHITE);
+            setBackground(null);
         }
         setOpaque(true);
         return this;

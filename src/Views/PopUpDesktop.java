@@ -5,13 +5,17 @@
  */
 package Views;
 
+import Models.ComboBox.ComboBoxEntreprise;
+import Parser.FecParser;
 import Tools.Resizer;
 import comptedit_db.Entreprise;
 import comptedit_db.Exercice;
+import comptedit_db.ExerciceRequest;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -31,6 +35,7 @@ public class PopUpDesktop extends JPopupMenu {
     private JXButton show_;
 
     private final JTabbedPane jtp_;
+    private JXButton month_diff_;
 
     public PopUpDesktop(JTabbedPane jTabbedPane1, final Entreprise entreprise, final Exercice exercice) {
 
@@ -40,18 +45,29 @@ public class PopUpDesktop extends JPopupMenu {
         setLayout(new VerticalLayout(0));
         add(affect_);
         add(show_);
+        add(month_diff_);
     }
 
-    public final void initComponent(Entreprise entreprise, Exercice exercice) {
-        String affect_title = entreprise.getNameEntreprise() + " : " + exercice.getDateBegin() + " / " + exercice.getDateEnd();
+    public final void initComponent(final Entreprise entreprise, final Exercice exercice) {
+        final String affect_title = entreprise.getNameEntreprise() + " : " + exercice.getDateBegin() + " / " + exercice.getDateEnd();
         affect_ = new JXButton("Affectation");
         affect_.setIcon(Resizer.get_resize_icon("Icon/link.png", 20, 20));
-        add_tab(affect_, affect_title, Resizer.get_resize_icon("Icon/link.png", 20, 20), new EditAffectation(entreprise, exercice));
 
-        String show_fec = "Vue FEC : " + entreprise.getNameEntreprise() + " : " + exercice.getDateBegin() + " / " + exercice.getDateEnd();
+        final String show_fec = "Vue FEC : " + entreprise.getNameEntreprise() + " : " + exercice.getDateBegin() + " / " + exercice.getDateEnd();
         show_ = new JXButton("Voir le fichier FEC");
         show_.setIcon(Resizer.get_resize_icon("Icon/stat.png", 20, 20));
-        add_tab(show_, show_fec, Resizer.get_resize_icon("Icon/stat.png", 20, 20), new ShowFEC(exercice));
+        
+        final String month_str_ = "Tableau comparatif / Mois : " + entreprise.getNameEntreprise() + " : " + exercice.getDateBegin() + " / " + exercice.getDateEnd();
+        month_diff_ = new JXButton("Afficher le tableau comparatif / Mois");
+        month_diff_.setIcon(Resizer.get_resize_icon("Icon/compare.png", 20, 20));
+        
+        
+        add_tab(affect_, affect_title, Resizer.get_resize_icon("Icon/link.png", 50, 50), new EditAffectation(entreprise, exercice));
+        add_tab(show_, show_fec, Resizer.get_resize_icon("Icon/stat.png", 50, 50), new ShowFEC(exercice));
+        add_tab(month_diff_, month_str_, Resizer.get_resize_icon("Icon/compare.png", 50, 50), new TcMonth(entreprise, exercice));
+        
+
+
     }
 
     public void add_tab(JXButton button, final String default_title, final Icon icon, final JComponent panel_add) {
@@ -95,7 +111,7 @@ public class PopUpDesktop extends JPopupMenu {
 
     public JComponent initCloseButton(String title) {
         final String title_compare = title;
-        JXButton close_button = new JXButton("x");
+        JXButton close_button = new JXButton("");
 
         close_button.addActionListener(new ActionListener() {
 

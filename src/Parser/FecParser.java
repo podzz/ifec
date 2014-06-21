@@ -124,7 +124,7 @@ public class FecParser {
         fec.setEcritureDate(getFormatedDate((String) mod.getField(FecModel.FecField.Ecriture_date)));
 
         fec.setCompteNum((String) mod.getField(FecModel.FecField.Compte_num));
-        fec.setCompteLib((String) mod.getField(FecModel.FecField.Compte_lib));
+        fec.setCompteLib(mod.getField(FecModel.FecField.Compte_lib).toString().trim());
         fec.setCompteAuxNum((String) mod.getField(FecModel.FecField.Compte_aux_num));
         fec.setCompteAuxLib((String) mod.getField(FecModel.FecField.Compte_aux_lib));
         fec.setPieceRef(((String) mod.getField(FecModel.FecField.Piece_ref)).substring(0, 2));

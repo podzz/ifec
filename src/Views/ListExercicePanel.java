@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Months;
 
 /**
  *
@@ -24,12 +27,20 @@ public class ListExercicePanel extends javax.swing.JPanel {
      */
     public ListExercicePanel(String date1, String date2) {
         initComponents();
+        Date t1 = null;
+        Date t2 = null;
         try {
-            jXDatePicker1.setDate(new SimpleDateFormat("yyyy-MM-dd" ).parse(date1));
-            jXDatePicker2.setDate(new SimpleDateFormat("yyyy-MM-dd" ).parse(date2));
+            t1 = new SimpleDateFormat("yyyy-MM-dd" ).parse(date1);
+            jXDatePicker1.setDate(t1);
+            t2 = new SimpleDateFormat("yyyy-MM-dd" ).parse(date2);
+            jXDatePicker2.setDate(t2);
         } catch (ParseException ex) {
             Logger.getLogger(ListExercicePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        DateTime dt1 = new DateTime(t1);
+        DateTime dt2 = new DateTime(t2);
+
+        jTextField1.setText(String.valueOf(Days.daysBetween(dt1, dt2).getDays() + 1) + " jours");
     }
 
     /**
@@ -43,22 +54,40 @@ public class ListExercicePanel extends javax.swing.JPanel {
 
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        jLabel2 = new javax.swing.JLabel();
         jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
 
-        setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        setBorder(null);
         setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.setBackground(java.awt.Color.lightGray);
         jPanel2.setOpaque(false);
+        jPanel2.setBorder(null);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel1.setText("Début :");
+        jPanel1.add(jLabel1);
 
         jXDatePicker1.setEditable(false);
         jPanel1.add(jXDatePicker1);
 
+        jLabel2.setText("Fin :");
+        jPanel1.add(jLabel2);
+
         jXDatePicker2.setEditable(false);
         jPanel1.add(jXDatePicker2);
+
+        jLabel3.setText("Durée :");
+        jPanel1.add(jLabel3);
+
+        jTextField1.setEditable(false);
+        jTextField1.setText("jTextField1");
+        jPanel1.add(jTextField1);
 
         jPanel2.add(jPanel1);
 
@@ -67,8 +96,12 @@ public class ListExercicePanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField jTextField1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
     // End of variables declaration//GEN-END:variables

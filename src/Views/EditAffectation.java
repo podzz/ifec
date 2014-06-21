@@ -5,11 +5,23 @@
  */
 package Views;
 
-import DragAndDrop.AffectHandler;
+import DragAndDrop.AffectTreeHandler;
+import DragAndDrop.AffectListHandler;
+import Models.List.ListAffectation;
+import Models.Tree.TreeTools;
 import Renderer.List.ListCompteRenderer;
+import Renderer.Tree.TreeAffectRenderer;
 import comptedit_db.Entreprise;
 import comptedit_db.Exercice;
+import comptedit_db.Fec;
+import comptedit_db.FecRequest;
+import java.util.Date;
+import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.SwingWorker;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 /**
  *
@@ -23,15 +35,30 @@ public class EditAffectation extends javax.swing.JPanel {
     private Exercice exercice_;
     private Entreprise entreprise_;
 
-    public EditAffectation(Entreprise entreprise, Exercice exercice) {
+    public EditAffectation(Entreprise entreprise, final Exercice exercice) {
 
         entreprise_ = entreprise;
         exercice_ = exercice;
-        
-       
+
         initComponents();
+
+        DefaultListModel listMod = new DefaultListModel();
+        List<Fec> l = FecRequest.getInstance().getListNonAffected(exercice.getFec());
+        for (Fec f : l) {
+            String cell_title = f.getCompteNum() + " - " + f.getCompteLib().trim();
+            if (!listMod.contains(cell_title)) {
+                listMod.addElement(cell_title);
+            }
+        }
+        jXList1.setModel(listMod);
         jXList1.setCellRenderer(new ListCompteRenderer());
-        jXTree1.setTransferHandler(new AffectHandler(jXTree1));
+        jXList1.setTransferHandler(new AffectListHandler(exercice.getFec(), jXList1, jXTree1));
+        FecRequest.getInstance().add_fire_component(new ListAffectation(jXList1, exercice), jXList1);
+
+        loadModel();
+
+        jXTree1.setCellRenderer(new TreeAffectRenderer());
+        jXTree1.setTransferHandler(new AffectTreeHandler(exercice.getFec(), jXList1, jXTree1));
         jXTree1.expandAll();
 
     }
@@ -52,17 +79,24 @@ public class EditAffectation extends javax.swing.JPanel {
 
         setLayout(new java.awt.GridLayout(1, 2));
 
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
+
+        jXList1.setBorder(null);
         jXList1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jXList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         jXList1.setDragEnabled(true);
+        jXList1.setLayoutOrientation(javax.swing.JList.VERTICAL_WRAP);
+        jXList1.setVisibleRowCount(-1);
         jScrollPane1.setViewportView(jXList1);
 
         add(jScrollPane1);
 
+        jXTree1.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED)));
+        jXTree1.setDragEnabled(true);
+        jXTree1.setDropMode(javax.swing.DropMode.ON_OR_INSERT);
         jScrollPane2.setViewportView(jXTree1);
 
         add(jScrollPane2);
@@ -75,4 +109,10 @@ public class EditAffectation extends javax.swing.JPanel {
     private org.jdesktop.swingx.JXList jXList1;
     private org.jdesktop.swingx.JXTree jXTree1;
     // End of variables declaration//GEN-END:variables
+
+    public final void loadModel() {
+        TreeTools t = new TreeTools(jXTree1);
+        t.loadTree(entreprise_.getStructureAnalytique(), jXTree1, exercice_.getFec());
+    }
+
 }

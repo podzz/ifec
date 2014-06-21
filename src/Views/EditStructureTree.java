@@ -6,6 +6,7 @@
 package Views;
 
 import Listener.Tree.MouseMotionListener;
+import Models.Tree.TreeTools;
 import Renderer.Tree.TreeRenderer;
 import comptedit_db.StructAnalRequest;
 import comptedit_db.StructureAnalytique;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import org.jdesktop.swingx.JXTree;
 
 /**
  *
@@ -25,7 +27,7 @@ public class EditStructureTree extends javax.swing.JPanel {
      */
     public EditStructureTree() {
         initComponents();
-
+        
         DefaultMutableTreeNode category = new DefaultMutableTreeNode("Libelle");
         jXTree1.setModel(new DefaultTreeModel(category));
         jXTree1.addMouseMotionListener(new MouseMotionListener(jXTree1));
@@ -51,94 +53,24 @@ public class EditStructureTree extends javax.swing.JPanel {
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    public void loadTree(String nameStruct) {
-        DefaultMutableTreeNode n = new DefaultMutableTreeNode(nameStruct);
-
-        // RESET TREE
-        int count = n.getChildCount();
-        for (int i = 0; i < count; i++) {
-            n.remove(0);
-        }
-
-        for (String s : list_section(nameStruct)) {
-            DefaultMutableTreeNode section = new DefaultMutableTreeNode(s);
-            for (String s2 : list_compte(nameStruct, s)) {
-                section.add(new DefaultMutableTreeNode(s2));
-            }
-            n.add(section);
-        }
-        jXTree1.setModel(new DefaultTreeModel(n));
-        jXTree1.expandAll();
-    }
-
-    public List<String> list_compte(String nameStruct, String section) {
-        List<StructureAnalytique> lsa = StructAnalRequest.getInstance().list_structanal_on_alias(nameStruct);
-        List<String> ls = new ArrayList<String>();
-
-        for (StructureAnalytique sa : lsa) {
-            if (sa.getSection() != null && sa.getCompteAnalytique() != null && sa.getLibelle() != null) {
-                if (sa.getSection().equals(section)) {
-                    ls.add(sa.getCompteAnalytique() + " - " + sa.getLibelle());
-                }
-            }
-        }
-
-        for (StructureAnalytique sa : lsa) {
-            if (sa.getSection() != null && sa.getSection().equals(section) && sa.getCompteAnalytique() == null) {
-                ls.add(sa.getLibelle());
-            }
-        }
-
-        return ls;
-    }
-
-    public List<String> list_section(String nameStruct) {
-        List<StructureAnalytique> aux = StructAnalRequest.getInstance().list_structanal_on_alias(nameStruct);
-        List<String> ls = new ArrayList<String>();
-
-        for (StructureAnalytique aux_sa : aux) {
-            if (aux_sa.getSection() != null && !ls.contains(aux_sa.getSection())) {
-                ls.add(aux_sa.getSection());
-            }
-        }
-        for (StructureAnalytique aux_sa : aux) {
-            if (aux_sa.getSection() == null && aux_sa.getCompteAnalytique() == null) {
-                ls.add(aux_sa.getLibelle());
-            }
-        }
-
-        return ls;
-    }
-
-    public String formatCompte(String compte)
-    {
-        return compte.substring(0,4);
-    }
-    
-    public String formatLibelle(String compte)
-    {
-        return compte.split(" - ")[1];
-    }
-    
     public void saveTree() {
         List<StructureAnalytique> l = new ArrayList<StructureAnalytique>();
         DefaultMutableTreeNode root_ = (DefaultMutableTreeNode) jXTree1.getModel().getRoot();
         for (int i = 0; i < root_.getChildCount(); i++) {
             DefaultMutableTreeNode child_ = (DefaultMutableTreeNode) root_.getChildAt(i);
             if (child_.getChildCount() > 0) {
-                for (int j = 0; j < child_.getChildCount(); j++)
-                {
+                for (int j = 0; j < child_.getChildCount(); j++) {
                     DefaultMutableTreeNode compte_child_ = (DefaultMutableTreeNode) child_.getChildAt(j);
-                    if (compte_child_.toString().startsWith("Calcul :"))
+                    if (compte_child_.toString().startsWith("Calcul :")) {
                         l.add(new StructureAnalytique(root_.toString(), child_.toString(), null, compte_child_.toString()));
-                    else
-                        l.add(new StructureAnalytique(root_.toString(), child_.toString(), compte_child_.toString().substring(0,4), compte_child_.toString().split(" - ")[1]));
+                    } else {
+                        l.add(new StructureAnalytique(root_.toString(), child_.toString(), compte_child_.toString().substring(0, 4), compte_child_.toString().split(" - ")[1]));
+                    }
                 }
-            }
-            else
-            {
-                if (child_.toString().startsWith("Calcul :"))
+            } else {
+                if (child_.toString().startsWith("Calcul :")) {
                     l.add(new StructureAnalytique(root_.toString(), null, null, child_.toString()));
+                }
             }
         }
         StructAnalRequest.getInstance().delete_all_alias(root_.toString());
@@ -151,4 +83,9 @@ public class EditStructureTree extends javax.swing.JPanel {
     private org.jdesktop.swingx.JXTree jXTree1;
     // End of variables declaration//GEN-END:variables
 
+    void loadTree(String string) {
+        TreeTools t = new TreeTools(jXTree1);
+        t.loadTree(string, jXTree1, true);
+    }
+    
 }

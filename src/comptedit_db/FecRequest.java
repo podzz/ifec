@@ -95,6 +95,77 @@ public class FecRequest {
             jc.getY().repaint();
         }
     }
+    
+    public List<Fec> getListNonAffected(int fec_id)
+    {
+        List<Fec> l = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            l = session.createQuery("from Fec WHERE FEC=" + fec_id + " AND AFFECTATION IS NULL AND SUBSTRING(COMPTE_NUM,1,1)> '5' ORDER BY COMPTE_NUM").list();
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
+    
+    public void add_affectation(int fec_id, String compte_anal, String affectation)
+    {
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            List<Fec> l = session.createQuery("from Fec WHERE FEC=" + fec_id + " AND COMPTE_NUM=" + compte_anal).list();
+            for (Fec f : l)
+            {
+                f.setAffectation(String.valueOf(affectation));
+                session.save(f);
+            }
+            session.getTransaction().commit();
+            fire_component();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void remove_affectation(int fec_id, String compte_anal)
+    {
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            List<Fec> l = session.createQuery("from Fec WHERE FEC=" + fec_id + " AND COMPTE_NUM=" + compte_anal).list();
+            for (Fec f : l)
+            {
+                f.setAffectation(null);
+                session.save(f);
+            }
+            session.getTransaction().commit();
+            fire_component();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+    }
+    
+      public List<String> list_affectation_on(int fec_id, String num)
+    {
+        
+        List<String> l = new ArrayList<String>();
+        try {
+            List<Fec> aux = null;
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            aux = session.createQuery("from Fec WHERE FEC=" + fec_id + " AND AFFECTATION="+ num).list();
+            for (Fec f : aux)
+            {
+                if (!l.contains(f.getCompteNum() + " - " + f.getCompteLib()))
+                    l.add(f.getCompteNum() + " - " + f.getCompteLib());
+            }
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return l;
+    }
 
     public void add_fire_component(AbstractModel jc, JComponent c) {
         l.add(new Tuple<AbstractModel, JComponent>(jc, c));

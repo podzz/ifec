@@ -10,19 +10,24 @@ import comptedit_db.Entreprise;
 import comptedit_db.EntrepriseRequest;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.jdesktop.swingx.JXSearchField;
 
 /**
  *
  * @author Flash
  */
-public class TableEntreprise extends AbstractTableModel implements AbstractModel {
+public class TableEntreprise implements TableModel, AbstractModel {
 
     private final String[] entetes = {"Nom"};
     private final EntrepriseRequest er_ = EntrepriseRequest.getInstance();
@@ -30,7 +35,8 @@ public class TableEntreprise extends AbstractTableModel implements AbstractModel
     private JXSearchField search_ = null;
     private JTable table_ = null;
 
-    public TableEntreprise() {
+    public TableEntreprise(JTable table) {
+        table_ = table;
         le_ = er_.list_entreprise();
     }
 
@@ -53,7 +59,7 @@ public class TableEntreprise extends AbstractTableModel implements AbstractModel
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return  le_.get(rowIndex).getNameEntreprise();
+                return le_.get(rowIndex);
             default:
                 return null;
         }
@@ -70,12 +76,19 @@ public class TableEntreprise extends AbstractTableModel implements AbstractModel
                 setList();
                 table_.revalidate();
                 table_.repaint();
+                
             }
         });
-    }
+        
+        search_.addKeyListener(new KeyAdapter() {
 
-    public void setTable(JTable table) {
-        table_ = table;
+          
+            @Override
+            public void keyReleased(KeyEvent e) {
+                table_.getSelectionModel().clearSelection();
+            }
+        });
+
     }
 
     public void setList() {
@@ -94,11 +107,33 @@ public class TableEntreprise extends AbstractTableModel implements AbstractModel
             table_.repaint();
         }
     }
-    
-    public Entreprise getEntreprise()
-    {
-        if (table_.getSelectedRow() >= 0)
+
+    public Entreprise getEntreprise() {
+        if (table_.getSelectedRow() >= 0) {
             return le_.get(table_.getSelectedRow());
+        }
         return null;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return String.class;
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+    }
+
+    @Override
+    public void addTableModelListener(TableModelListener l) {
+    }
+
+    @Override
+    public void removeTableModelListener(TableModelListener l) {
     }
 }

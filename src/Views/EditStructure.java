@@ -6,9 +6,10 @@
 package Views;
 
 import Models.ComboBox.ComboBoxStructure;
-import Models.Table.TableStructureEdit;
-import Models.Table.TableEntreprise2;
 import Models.Table.TableEntreprise;
+import Models.Table.TableEntreprise2;
+import Models.Table.TableStructureEdit;
+import Models.Tree.TreeTools;
 import Tools.Resizer;
 import comptedit_db.Entreprise;
 import comptedit_db.EntrepriseRequest;
@@ -195,7 +196,7 @@ public class EditStructure extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jXButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jXPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+                .addComponent(jXPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

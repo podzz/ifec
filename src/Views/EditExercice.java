@@ -32,13 +32,12 @@ public class EditExercice extends javax.swing.JFrame {
         EntrepriseRequest.getInstance().add_fire_component(cbe_, jComboBox1);
         jComboBox1.setModel(cbe_);
         jComboBox1.setSelectedItem(null);
-        
+
         cbex_ = new ComboBoxExercice(jComboBox2);
         ExerciceRequest.getInstance().add_fire_component(cbex_, jComboBox2);
         jComboBox2.setModel(cbex_);
         jComboBox2.setSelectedItem(null);
-        
-        
+
     }
 
     /**
@@ -265,36 +264,24 @@ public class EditExercice extends javax.swing.JFrame {
 
     private void jXButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton1ActionPerformed
 
-        
         final WaitFrame wf = new WaitFrame();
         wf.setVisible(true);
         wf.setLocation(100, 100);
         wf.revalidate();
         wf.repaint();
 
-        Thread thr = new Thread(new Runnable() {
+        FecParser fecParser = new FecParser(jXTextField1.getText());
+        int id_fec = fecParser.add_to_database();
+        Exercice new_exercice = new Exercice((int) ((ComboBoxEntreprise) jComboBox1.getModel()).get_id_selected(), id_fec, jXDatePicker1.getDate(), jXDatePicker2.getDate());
+        ExerciceRequest.getInstance().add_exercice(new_exercice);
 
-            @Override
-            public void run() {
-                try {
-                    
-                    FecParser fecParser = new FecParser(jXTextField1.getText());
-                    int id_fec = fecParser.add_to_database();
-                    Exercice new_exercice = new Exercice((int)((ComboBoxEntreprise)jComboBox1.getModel()).get_id_selected(), id_fec, jXDatePicker1.getDate(), jXDatePicker2.getDate());
-                    ExerciceRequest.getInstance().add_exercice(new_exercice);
-                    
-                } finally {
-                    wf.stop();
-                    jComboBox1.setSelectedItem(null);
-                    jXTextField1.setText("");
-                    jXDatePicker1.setDate(null);
-                    jXDatePicker2.setDate(null);
-                }
-            }
-        });
-        thr.start();
-        
-        
+        wf.stop();
+        jComboBox1.setSelectedItem(null);
+        jXTextField1.setText("");
+        jXDatePicker1.setDate(null);
+        jXDatePicker2.setDate(null);
+
+
     }//GEN-LAST:event_jXButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -302,7 +289,7 @@ public class EditExercice extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jXButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXButton2ActionPerformed
-        ExerciceRequest.getInstance().delete_exercice(((ComboBoxExercice)jComboBox2.getModel()).get_id_selected());
+        ExerciceRequest.getInstance().delete_exercice(((ComboBoxExercice) jComboBox2.getModel()).get_id_selected());
         jComboBox2.setSelectedItem(null);
     }//GEN-LAST:event_jXButton2ActionPerformed
 

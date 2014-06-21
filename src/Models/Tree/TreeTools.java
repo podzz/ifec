@@ -1,6 +1,14 @@
 package Models.Tree;
 
+import Models.TreeTable.ColumnData;
+import Models.TreeTable.RowData;
 import Tools.Resizer;
+import comptedit_db.Entreprise;
+import comptedit_db.Exercice;
+import comptedit_db.Fec;
+import comptedit_db.FecRequest;
+import comptedit_db.StructAnalRequest;
+import comptedit_db.StructureAnalytique;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -148,20 +156,20 @@ public class TreeTools {
         return node.toString().substring(begin + 1, last);
 
     }
-    
-    public String formatNameCalc(DefaultMutableTreeNode node)
-    {
+
+    public String formatNameCalc(DefaultMutableTreeNode node) {
         String str = node.toString();
         str = str.replaceAll("Calcul : ", "");
         int count = 0;
         String name = "";
-        for (int i = 0; i < str.length(); i++)
-        {
+        for (int i = 0; i < str.length(); i++) {
             name += str.charAt(i);
-            if (str.charAt(i) == '$')
+            if (str.charAt(i) == '$') {
                 count++;
-            if (count == 2)
-                break;     
+            }
+            if (count == 2) {
+                break;
+            }
         }
         return name;
     }
@@ -177,25 +185,151 @@ public class TreeTools {
 
             for (DefaultMutableTreeNode a : l_str) {
                 String expr = formatCalc(a);
-                if (expr.contains("$" + formatCompte(delete) + "$"))
+                if (expr.contains("$" + formatCompte(delete) + "$")) {
                     return false;
+                }
             }
             return true;
         }
         return false;
     }
-    
-    
-    public List<DefaultMutableTreeNode> list_all_calc_exclude_root()
-    {
+
+    public List<DefaultMutableTreeNode> list_all_calc_exclude_root() {
         List<DefaultMutableTreeNode> l = new ArrayList<DefaultMutableTreeNode>();
         DefaultMutableTreeNode root_ = (DefaultMutableTreeNode) t_.getModel().getRoot();
-        for (int i = 0; i < root_.getChildCount(); i++)
-        {
+        for (int i = 0; i < root_.getChildCount(); i++) {
             DefaultMutableTreeNode child = (DefaultMutableTreeNode) root_.getChildAt(i);
-            if (child.getChildCount() > 0)
+            if (child.getChildCount() > 0) {
                 l.addAll(list_calc_in(child.getPath()));
+            }
         }
         return l;
     }
+
+    public void loadTree(String nameStruct, JXTree t, boolean with_calc) {
+        DefaultMutableTreeNode n = new DefaultMutableTreeNode(nameStruct);
+
+        // RESET TREE
+        int count = n.getChildCount();
+        for (int i = 0; i < count; i++) {
+            n.remove(0);
+        }
+
+        for (String s : list_section(nameStruct, with_calc)) {
+            DefaultMutableTreeNode section = new DefaultMutableTreeNode(s);
+            for (String s2 : list_compte(nameStruct, s, with_calc)) {
+
+                section.add(new DefaultMutableTreeNode(s2));
+
+            }
+            n.add(section);
+        }
+        t.setModel(new DefaultTreeModel(n));
+        t.expandAll();
+    }
+
+    public void loadTree(String nameStruct, JXTree t, int fec_id) {
+        DefaultMutableTreeNode n = new DefaultMutableTreeNode(nameStruct);
+
+        // RESET TREE
+        int count = n.getChildCount();
+        for (int i = 0; i < count; i++) {
+            n.remove(0);
+        }
+
+        for (String s : list_section(nameStruct, false)) {
+            DefaultMutableTreeNode section = new DefaultMutableTreeNode(s);
+            for (String s2 : list_compte(nameStruct, s, false)) {
+                DefaultMutableTreeNode affectation = new DefaultMutableTreeNode(s2);
+
+                List<String> l = FecRequest.getInstance().list_affectation_on(fec_id, s2.substring(0, 4));
+                for (String f : l) {
+                    affectation.add(new DefaultMutableTreeNode(f));
+                }
+                section.add(affectation);
+            }
+            n.add(section);
+        }
+        t.setModel(new DefaultTreeModel(n));
+        t.expandAll();
+    }
+    
+    public void loadTcTree(String nameStruct, JXTree t, int fec_id, Exercice exercice, ColumnData cd) {
+        DefaultMutableTreeNode n = new DefaultMutableTreeNode(nameStruct);
+
+        // RESET TREE
+        int count = n.getChildCount();
+        for (int i = 0; i < count; i++) {
+            n.remove(0);
+        }
+
+        for (String s : list_section(nameStruct, false)) {
+            DefaultMutableTreeNode section = new DefaultMutableTreeNode(s);
+            for (String s2 : list_compte(nameStruct, s, false)) {
+                DefaultMutableTreeNode affectation = new DefaultMutableTreeNode(s2);
+
+                List<String> l = FecRequest.getInstance().list_affectation_on(fec_id, s2.substring(0, 4));
+                for (String f : l) {
+                    affectation.add(new DefaultMutableTreeNode(new RowData(f, exercice, cd)));
+                }
+                section.add(affectation);
+            }
+            n.add(section);
+        }
+        t.setModel(new DefaultTreeModel(n));
+        t.expandAll();
+    }
+
+    public List<String> list_compte(String nameStruct, String section, boolean with_calc) {
+        List<StructureAnalytique> lsa = StructAnalRequest.getInstance().list_structanal_on_alias(nameStruct);
+        List<String> ls = new ArrayList<String>();
+
+        for (StructureAnalytique sa : lsa) {
+            if (sa.getSection() != null && sa.getCompteAnalytique() != null && sa.getLibelle() != null) {
+                if (sa.getSection().equals(section)) {
+                    ls.add(sa.getCompteAnalytique() + " - " + sa.getLibelle());
+                }
+            }
+        }
+
+        if (with_calc) {
+            for (StructureAnalytique sa : lsa) {
+                if (sa.getSection() != null && sa.getSection().equals(section) && sa.getCompteAnalytique() == null) {
+                    ls.add(sa.getLibelle());
+                }
+            }
+        }
+
+        return ls;
+    }
+
+    public List<String> list_section(String nameStruct, boolean with_calc) {
+        List<StructureAnalytique> aux = StructAnalRequest.getInstance().list_structanal_on_alias(nameStruct);
+        List<String> ls = new ArrayList<String>();
+
+        for (StructureAnalytique aux_sa : aux) {
+            if (aux_sa.getSection() != null && !ls.contains(aux_sa.getSection())) {
+                ls.add(aux_sa.getSection());
+            }
+        }
+
+        if (with_calc) {
+            for (StructureAnalytique aux_sa : aux) {
+                if (aux_sa.getSection() == null && aux_sa.getCompteAnalytique() == null) {
+                    ls.add(aux_sa.getLibelle());
+                }
+            }
+        }
+
+        return ls;
+    }
+
+    public String formatCompte(String compte) {
+        return compte.substring(0, 4);
+    }
+
+    public String formatLibelle(String compte) {
+        return compte.split(" - ")[1];
+    }
+
 }

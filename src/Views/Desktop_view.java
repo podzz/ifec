@@ -9,7 +9,7 @@ import Models.List.ListExercice;
 import Models.List.ListSelectionListenerEntreprise;
 import Models.Table.TableEntreprise;
 import Renderer.List.ListRenderer;
-import Renderer.TabbedPane.TabUI;
+import Renderer.Table.TableEntepriseRenderer;
 import Tools.Resizer;
 import comptedit_db.Entreprise;
 import comptedit_db.EntrepriseRequest;
@@ -33,15 +33,17 @@ public class Desktop_view extends javax.swing.JFrame {
      * Creates new form Desktop_view
      */
     public Desktop_view() {
-        em_ = new TableEntreprise();
-
+        this.setIconImage(Resizer.get_resize_icon("Icon/stat.png", 100, 100).getImage());
         initComponents();
+          
         
-        TabUI ui = new TabUI();
-        jTabbedPane1.setUI(ui);
-        EntrepriseRequest.getInstance().add_fire_component(em_, jTable1);
+        em_ = new TableEntreprise(jTable1);
         em_.setSearch(jXSearchField1);
-        em_.setTable(jTable1);
+        
+        jTable1.setModel(em_);
+
+        EntrepriseRequest.getInstance().add_fire_component(em_, jTable1);
+        
 
         le_ = new ListExercice(jXList1);
         jXList1.setModel(le_);
@@ -76,9 +78,14 @@ public class Desktop_view extends javax.swing.JFrame {
 
         jXTaskPane6.add(new EditEntreprise().getContentPane());
         jXTaskPane7.add(new EditExercice().getContentPane());
-        jPanel3.add(new EditStructure().getContentPane(), BorderLayout.CENTER);
+        jXTaskPane8.add(new EditStructure().getContentPane(), BorderLayout.CENTER);
 
         addListeners();
+        
+       // jXTitledPanel2.setTitlePainter(new MattePainter(new Color(255,255,255)));
+        
+        
+        jTable1.setDefaultRenderer(String.class, new TableEntepriseRenderer());
     }
 
     /**
@@ -90,8 +97,13 @@ public class Desktop_view extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jXStatusBar1 = new org.jdesktop.swingx.JXStatusBar();
+        jLabel1 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jXImageView1 = new org.jdesktop.swingx.JXImageView();
+        jPanel5 = new javax.swing.JPanel();
         jXTitledPanel2 = new org.jdesktop.swingx.JXTitledPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -105,6 +117,9 @@ public class Desktop_view extends javax.swing.JFrame {
         jXTaskPane6 = new org.jdesktop.swingx.JXTaskPane();
         jXTaskPane7 = new org.jdesktop.swingx.JXTaskPane();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jXTaskPaneContainer4 = new org.jdesktop.swingx.JXTaskPaneContainer();
+        jXTaskPane8 = new org.jdesktop.swingx.JXTaskPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -113,15 +128,53 @@ public class Desktop_view extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("ComptEdit");
         setMinimumSize(new java.awt.Dimension(977, 537));
 
+        jLabel1.setText("Status");
+        jXStatusBar1.add(jLabel1);
+
+        getContentPane().add(jXStatusBar1, java.awt.BorderLayout.SOUTH);
+
+        jTabbedPane1.setBackground(java.awt.Color.lightGray);
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane1.setOpaque(true);
+
+        jPanel1.setBackground(java.awt.Color.darkGray);
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jXImageView1.setBackgroundPainter(null);
+        jXImageView1.setImage(Resizer.get_image("Icon/banniere.png")
+        );
+        jXImageView1.setOpaque(false);
+        jXImageView1.setEditable(false);
+
+        javax.swing.GroupLayout jXImageView1Layout = new javax.swing.GroupLayout(jXImageView1);
+        jXImageView1.setLayout(jXImageView1Layout);
+        jXImageView1Layout.setHorizontalGroup(
+            jXImageView1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1113, Short.MAX_VALUE)
+        );
+        jXImageView1Layout.setVerticalGroup(
+            jXImageView1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 175, Short.MAX_VALUE)
+        );
+
+        jPanel4.add(jXImageView1, java.awt.BorderLayout.NORTH);
+
+        jPanel1.add(jPanel4, java.awt.BorderLayout.NORTH);
+
+        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.X_AXIS));
 
         jXTitledPanel2.setTitle("Liste d'entreprises");
 
-        jTable1.setModel(em_);
+        jTable1.setRowHeight(40);
         jScrollPane2.setViewportView(jTable1);
 
+        jXSearchField1.setBackground(java.awt.Color.lightGray);
+        jXSearchField1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         jXSearchField1.setPromptFontStyle(java.awt.Font.BOLD);
         jXSearchField1.setRecentSearchesSaveKey("");
         jXSearchField1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -136,9 +189,9 @@ public class Desktop_view extends javax.swing.JFrame {
             jXTitledPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jXTitledPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jXTitledPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jXTitledPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jXSearchField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jXTitledPanel2Layout.setVerticalGroup(
@@ -147,9 +200,11 @@ public class Desktop_view extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jXSearchField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                .addGap(14, 14, 14))
         );
+
+        jPanel5.add(jXTitledPanel2);
 
         jXTitledPanel1.setTitle("Liste d'exercices");
 
@@ -167,42 +222,34 @@ public class Desktop_view extends javax.swing.JFrame {
             jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jXTitledPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jXTitledPanel1Layout.setVerticalGroup(
             jXTitledPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jXTitledPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jXTitledPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jXTitledPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jXTitledPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jXTitledPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        jPanel5.add(jXTitledPanel1);
+
+        jPanel1.add(jPanel5, java.awt.BorderLayout.CENTER);
 
         jTabbedPane1.addTab("Accueil", Resizer.get_resize_icon("Icon/home.png", 50, 50)
             , jPanel1);
 
-        jXTaskPane6.setCollapsed(true);
+        jPanel2.setBackground(java.awt.Color.lightGray);
+        jPanel2.setOpaque(false);
+
+        jXTaskPaneContainer3.setBackground(java.awt.Color.lightGray);
+
+        jXTaskPane6.setBackground(java.awt.Color.lightGray);
         jXTaskPane6.setTitle("Edition des entreprises");
         jXTaskPaneContainer3.add(jXTaskPane6);
 
-        jXTaskPane7.setCollapsed(true);
+        jXTaskPane7.setBackground(java.awt.Color.lightGray);
         jXTaskPane7.setTitle("Edition d'exercice");
         jXTaskPaneContainer3.add(jXTaskPane7);
 
@@ -214,23 +261,55 @@ public class Desktop_view extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1101, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 767, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Edition générale", Resizer.get_resize_icon("Icon/modification.png", 50, 50)
             , jPanel2);
 
-        jPanel3.setLayout(new java.awt.BorderLayout());
+        jPanel3.setBackground(java.awt.Color.lightGray);
+        jPanel3.setOpaque(false);
+
+        jXTaskPaneContainer4.setBackground(java.awt.Color.lightGray);
+        jXTaskPaneContainer4.setLayout(new java.awt.BorderLayout());
+
+        jXTaskPane8.setBackground(java.awt.Color.lightGray);
+        jXTaskPane8.setTitle("Edition des structures analytiques");
+        jXTaskPane8.setOpaque(false);
+        jXTaskPane8.getContentPane().setLayout(new java.awt.BorderLayout());
+        jXTaskPaneContainer4.add(jXTaskPane8, java.awt.BorderLayout.CENTER);
+
+        jScrollPane5.setViewportView(jXTaskPaneContainer4);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 1101, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         jTabbedPane1.addTab("Edition de structure analytique", Resizer.get_resize_icon("Icon/modification_entreprise.png", 50, 50)
             , jPanel3);
+
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("Fichier");
 
@@ -265,20 +344,6 @@ public class Desktop_view extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1)
-                .addContainerGap())
-        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -327,6 +392,7 @@ public class Desktop_view extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -336,16 +402,23 @@ public class Desktop_view extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private org.jdesktop.swingx.JXImageView jXImageView1;
     private org.jdesktop.swingx.JXList jXList1;
     private org.jdesktop.swingx.JXSearchField jXSearchField1;
+    private org.jdesktop.swingx.JXStatusBar jXStatusBar1;
     private org.jdesktop.swingx.JXTaskPane jXTaskPane6;
     private org.jdesktop.swingx.JXTaskPane jXTaskPane7;
+    private org.jdesktop.swingx.JXTaskPane jXTaskPane8;
     private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer3;
+    private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer4;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel1;
     private org.jdesktop.swingx.JXTitledPanel jXTitledPanel2;
     // End of variables declaration//GEN-END:variables

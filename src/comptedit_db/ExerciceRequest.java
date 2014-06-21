@@ -66,6 +66,21 @@ public class ExerciceRequest {
         }
         return le;
     }
+    
+    
+    public int count_exercice_in(long id) {
+        List<Entreprise> l = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            l = session.createQuery("from Exercice WHERE ENTREPRISE=" + id).list();
+
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        return l.size();
+    }
 
     public void delete_exercice(long id) {
         try {
